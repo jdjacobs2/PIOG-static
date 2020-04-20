@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div style="margin-bottom: 20px;">
+      <!-- <form action="http://localhost:5000/test" method="get"> -->
+
+      <!-- use videos starting for following code https://www.youtube.com/watch?v=4wa3CMK4E2Y&list=PL4cUxeGkcC9jUPIes_B8vRjn1_GaplOPQ&index=18  
+      code is also at https://github.com/iamshaunjp/firebase-auth/tree/lesson-18-->
+      <!-- <form  action="https://us-central1-taswell-f90e4.cloudfunctions.net/date" method="get"> -->
+      <form class="getName">
+        <input type="text" name="getNameForm" id="name" />
+        <input type="submit" value="name" id="submit-get" />
+      </form>
+    </div>
+
+ <!-- Insert these scripts at the bottom of the HTML, but before you use any Firebase services -->
+
+  <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+  <script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-app.js"></script>
+  <!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics -->
+  <script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-analytics.js"></script>
+  <!-- Add Firebase products that you want to use -->
+  <script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-firestore.js"></script>
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+
+<!-- Initialize Firebase -->
+<!-- <script src="/__/firebase/init.js"></script> -->
+
+<!-- <script src="https://www.gstatic.com/firebasejs/7.14.1/firebase.js"></script> -->
+<script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-functions.js"></script>
+
+<!-- Initialize Firebase in your app (no need to include your Firebase config object when using reserved Hosting URLs):  -->
+<!-- Load the Firebase SDKs before loading this file -->
+<!-- <script src="/__/firebase/init.js"></script> -->
+
+    <script>
+      const firebaseConfig = {
+        apiKey: "AIzaSyCAM2TgIq8dfhx08OvCtz4QULMYvp9HS-8",
+        authDomain: "taswell-f90e4.firebaseapp.com",
+        databaseURL: "https://taswell-f90e4.firebaseio.com",
+        projectId: "taswell-f90e4",
+        storageBucket: "taswell-f90e4.appspot.com",
+        messagingSenderId: "277717169423",
+        appId: "1:277717169423:web:ca937f0e05387e50703a7a",
+      };
+
+      firebase.initializeApp(firebaseConfig);
+
+      const functions = firebase.functions();
+      const getNameForm = document.querySelector(".getName");
+      getNameForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const nameEntry = document.querySelector("#name").value;
+        const addName = functions.httpsCallable("getUser");
+        addName({ name: nameEntry }).then((result) => console.log(result));
+      });
+    </script>
+
+    <!-- <div>
+      <!-- <form  class="form-example" name="form-example" id="form-example"> 
+      <form
+        action="https://taswell-f90e4.web.app/getForm/"
+        class="form-example"
+        name="form-example"
+        id="form-example"
+        method="post"
+      >
+        <div class="form-example">
+          <label for="name">Enter your name: </label>
+          <input type="text" name="name" id="name" required />
+        </div>
+        <div class="form-example">
+          <label for="email">Enter your email: </label>
+          <input type="email" name="email" id="email" required />
+        </div>
+        <div>
+          <label for="amount">Donation Amount</label>
+          <input type="text" name="amount" id="amount" required />
+        </div>
+        <div class="radio">
+          <label for="single" class="radio">Simple Donation</label>
+          <input
+            type="radio"
+            class="radio"
+            name="type"
+            id="single"
+            value="single"
+          />
+        </div>
+        <div class="radio">
+          <label for="subscription" class="radio">Recuring Donation</label>
+          <input
+            type="radio"
+            class="radio"
+            name="type"
+            id="subscription"
+            value="subscription"
+          />
+        </div>
+        <div class="form-example">
+          <input type="submit" value="I Want To Donate" />
+        </div>
+      </form>
+    </div>
+
+
+    <script>
+      myForm = document.getElementById('form-example');
+      myForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        console.log('In Listener');
+        const formData = new FormData(myForm);
+        console.log('formData:', formData);
+      // fetch based on https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
+        fetch('https://taswell-f90e4.firebaseapp.com/app/getForm/',{
+          method: 'post',
+          headers: {
+          },
+          body: formData
+          })
+          .then(resp => {
+            return resp.json();
+          } )
+        .then(data => {
+          console.log('In response to fetch');
+          console.log(data);
+        })
+        .catch(error => {console.error(error)});
+      });
+    </script> -->
+  </body>
+</html>
