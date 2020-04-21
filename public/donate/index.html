@@ -12,12 +12,32 @@
     <!-- use videos starting for following code https://www.youtube.com/watch?v=4wa3CMK4E2Y&list=PL4cUxeGkcC9jUPIes_B8vRjn1_GaplOPQ&index=18  
     code is also at https://github.com/iamshaunjp/firebase-auth/tree/lesson-18-->
 
-    <form class="getUser">
+    <!-- <form class="getUser">
       <input type="email" name="email" id="email" placeholder="Enter email" required />
       <input type="text" name="password" id="password" required />
       <input type="submit" value="Submit" id="submit-user" />
     </form>
-    </div>
+    </div> -->
+
+<!-- materialize form -->
+<section class="section container" id="user-section">
+  <div class="row">
+    <div class="col s6">
+      <form id="getUser">
+        <div class="input-field">
+          <input type="email" id="email-1" required validate>
+          <label for="email-1">Enter Email</label>
+        </div>
+       <div class="input-field">
+         <input type="password" id="password-1" required validate>
+         <label for="password-1">Enter Password</label>
+        </div>
+        <div class="input-field">
+          <input type="submit" class="btn teal orange-text center lighten-3" value="Hit Once">
+        </div>
+      </form>
+  </div>
+</section>
 
     <!-- Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
@@ -50,12 +70,12 @@
       firebase.initializeApp(firebaseConfig);
 
       const functions = firebase.functions();
-      const getUserForm = document.querySelector(".getUser");
+      const getUserForm = document.querySelector("#getUser");
 
       getUserForm.addEventListener("submit", (e) => {
         e.preventDefault();
-        const email = document.querySelector("#email").value;
-        const password = document.querySelector("#password").value;
+        const email = document.querySelector("#email-1").value;
+        const password = document.querySelector("#password-1").value;
         const getUser = functions.httpsCallable("getUser");
         getUser({ email, password }).then((result) => console.log(result));
       });
