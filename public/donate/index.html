@@ -4,46 +4,85 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-<!-- Compiled and minified CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <!-- Compiled and minified CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
+    />
   </head>
   <body>
-
     <!-- use videos starting for following code https://www.youtube.com/watch?v=4wa3CMK4E2Y&list=PL4cUxeGkcC9jUPIes_B8vRjn1_GaplOPQ&index=18  
     code is also at https://github.com/iamshaunjp/firebase-auth/tree/lesson-18-->
 
-    <!-- <form class="getUser">
-      <input type="email" name="email" id="email" placeholder="Enter email" required />
-      <input type="text" name="password" id="password" required />
-      <input type="submit" value="Submit" id="submit-user" />
-    </form>
-    </div> -->
+    <h1 class="center-align"  style="color:green">Do you see me</h1>
 
-<!-- materialize form -->
-<section class="section container" id="user-section">
-  <div class="row">
-    <div class="col s6">
-      <form id="getUser">
-        <div class="input-field">
-          <input type="email" id="email-1" required validate>
-          <label for="email-1">Enter Email</label>
-        </div>
-       <div class="input-field">
-         <input type="password" id="password-1" required validate>
-         <label for="password-1">Enter Password</label>
-        </div>
-        <div class="input-field">
-          <input type="submit" class="btn teal orange-text center lighten-3" value="Hit Once">
-        </div>
-      </form>
-  </div>
-</section>
+    <section class="center-align"   id="get-with-authorization" >
+      <div style="margin-bottom: 35px;">
+        <a id="getAuth" class="waves-effect waves-light btn" href="#">Punch Me</a>
+      </div>
 
-    <!-- Compiled and minified JavaScript -->
+      <p id="resp" style="margin-bottom: 30px;"></p>
+      
+
+      <script>
+        const getAuth = document.querySelector('#getAuth');
+        const resp = document.querySelector('#resp');
+        getAuth.addEventListener('click', () => {
+          console.log("before fetch");
+          fetch('https://us-central1-taswell-f90e4.cloudfunctions.net/app/helloworld', {
+            headers: new Headers({
+              'Auth': '44819bd32d8e799f3042d06ed0a3329632608c17'})
+            })
+          .then(response => {
+            return response.text();
+          })
+          .then(data => {
+            console.log(data);
+            resp.innerHTML = data;
+          });
+        });
+      </script>
+
+    <section id="modal-materialize">
+      <!-- Modal Trigger Button-->
+      <a class="waves-effect waves-light btn modal-trigger" href="#modal1"
+        >Modal</a
+      >
+
+      <!-- Modal Structure -->
+      <div id="modal1" class="modal">
+        <div class="modal-content">
+          <div class="container" id="user-section">
+            <div class="row">
+              <div class="col s6">
+                <form id="getUser">
+                  <div class="input-field">
+                    <input type="email" id="email-1" required validate />
+                    <label for="email-1">Enter Email</label>
+                  </div>
+                  <div class="input-field">
+                    <input type="password" id="password-1" required validate />
+                    <label for="password-1">Enter Password</label>
+                  </div>
+                  <div class="input-field">
+                    <input
+                      type="submit"
+                      class="btn teal orange-text center lighten-3 modal-close"
+                      value="Hit Once"
+                    />
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Compiled and minified JavaScript Materialize-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    
-    <!-- Insert these scripts at the bottom of the HTML, but before you use any Firebase services -->
 
+    <!-- Insert these scripts at the bottom of the HTML, but before you use any Firebase services -->
     <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
     <script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-app.js"></script>
     <!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics -->
@@ -81,5 +120,12 @@
       });
     </script>
 
+    <!-- Initialize materialize javascript after DOM loads -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        var elems = document.querySelectorAll(".modal");
+        var instances = M.Modal.init(elems, {});
+      });
+    </script>
   </body>
 </html>

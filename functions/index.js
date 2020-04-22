@@ -1,9 +1,7 @@
 // const functions = require("firebase-functions");
-const functions = require('firebase-functions');
+const functions = require("firebase-functions");
 const express = require("express");
-const cors = require("cors")({
-  origin: true
-});
+const cors = require("cors");
 const multer = require("multer");
 const path = require("path");
 
@@ -21,45 +19,46 @@ const path = require("path");
 // });
 
 const app = express();
-app.use(cors);
-var upload = multer();
+app.use(cors({origin: true}));
+// var upload = multer();
+app.use(express.static(path.resolve(__dirname, "../public")));
 
-app.use(express.static(path.join(__dirname, '../public')));
-// let allowCrossDomain = function(req, res, next) {
-//   res.header('Access-Control-Allow-Origin', "*");
-//   res.header('Access-Control-Allow-Headers', "*");
-//   next();
-// }
-// app.use(allowCrossDomain);
-// app.use((req, res, next) => {
-//     res.append('Access-Control-Allow-Origin', ['*']);
-//     res.append('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-//     res.append('Access-Control-Allow-Headers', 'Content-Type');
-//     next();
+// test of get using custom key
+// from:  https://medium.com/@nschairer/how-to-protect-firebase-https-cloud-functions-f12d1a22370d
+app.get("/helloworld", (req, res) => {
+  const key = functions.config().helloworld.key;
+  console.log('the key is ', key);
+  // const req_key = req.header('auth');
+  const { headers } = req;
+  req_key = headers['auth'];
+  console.log('req_key:', req_key);
+  console.log('headers:', req.headers)
+  if (key === req_key) {
+      res.status(200).send('Hello from Firebase!');
+  } else {
+      res.status(400).send('Error 400: Bad key');
+  }
+  // res.send(`the key is ${key}`);
+});
+exports.app = functions.https.onRequest(app);
+
+// exports.helloWorld = functions.https.onRequest((req, res) => {
+//   const key = functions.config().helloworld.key;
+//   console.log(key);
+//     const req_key = request.get("auth");
+//     if (key === req.key) {
+//       res.status(200).send("Hello from Firebase");
+//     } else {
+//       res.status(400).send("Error 404:  Bad Key");
+//     }
+//   }
+//   res.send(`From helloworld key is ${key}`);
+//   return cors(req,res, () => res.send('tonight'));
+//   res.send("this worked");
 // });
-// app.use(express.urlencoded());
-// app.use(multer);
 
-// From https://stackoverflow.com/questions/23751914/how-can-i-set-response-header-on-express-js-assets 
-
-// app.get("/test", (req, res) => {
-//   console.log('in app.get');
-//   // console.log(req.query);
-//   console.log(path.join(__dirname, '/get-send.html'));
-//   res.send('this is the send function');
-//   // res.sendFile(path.join(__dirname,'/get-send.html'));
-// });
-
-// app.post("/getForm", upload.none(), (req, res) => {
-//   console.log("In getForm 3");
-//   console.log(req.body.name);
-//   res.send(req.body);
-// });
-
+  
 exports.getUser = functions.https.onCall((data, context) => {
   console.log(data.email, data.password);
   return data.password;
 });
-
-// exports.getForm = functions.https.onRequest(app)
-
