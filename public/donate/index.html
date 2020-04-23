@@ -66,7 +66,7 @@
 
                   <div class="row">
                     <div class="input-field">
-                      <select>
+                      <select id="currency">
                         <!-- <option value="" disabled selected>Amount</option> -->
                         <option value="dollars">US Dollars</option>
                         <option value="euros">Euros</option>
@@ -79,7 +79,7 @@
                   <div class="row">
                     <!-- <div class="input-field"> -->
                       <label >
-                        <input name="donation" class="with-gap" id="one-time" type="radio" checked />
+                        <input name="duration" class="with-gap" id="one-time" type="radio" value="one-time" checked />
                         <span>One Time Donation</span>
                       </label>
                     <!-- </div> -->
@@ -88,7 +88,7 @@
                   <div class="row">
                     <!-- <div class="input-field"> -->
                       <label >
-                        <input type="radio"  class="with-gap" id="recurring" name="donation"/>
+                        <input type="radio" value="recurring"  class="with-gap" id="recurring" name="duration"/>
                         <span>Recurring Donation</span>
                       </label>
                     <!-- </div> -->
@@ -140,14 +140,15 @@
       firebase.initializeApp(firebaseConfig);
 
       const functions = firebase.functions();
-      const getUserForm = document.querySelector("#getUser");
+      const getContributionForm = document.querySelector("#getContribution");
 
-      getUserForm.addEventListener("submit", (e) => {
+      getContributionForm.addEventListener("submit", (e) => {
         e.preventDefault();
-        const email = document.querySelector("#email-1").value;
-        const password = document.querySelector("#password-1").value;
-        const getUser = functions.httpsCallable("getUser");
-        getUser({ email, password }).then((result) => console.log(result));
+        const amount = document.querySelector("#amount").value;
+        // const currency = document.querySelector("#currency").value;
+        // const duration = document.querySelectorAll("[name=duration]").value;
+        const contribution = functions.httpsCallable("getContribution");
+        contribution({ amount }).then((result) => console.log(result));
       });
     </script>
 
