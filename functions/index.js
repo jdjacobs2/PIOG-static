@@ -57,5 +57,7 @@ exports.getContribution = functions.https.onCall((data, context) => {
   //     return data.amount;
   //   }
   // });
-  return 'empty';
+  console.log('in getContribution');
+  console.log(data.amount);
+  return data.amount;
 });

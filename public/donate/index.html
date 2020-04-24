@@ -58,43 +58,11 @@
 
                   <div class="row">
                     <div class="input-field">
-                      <input type="number" id="amount" required validate />
+                      <input type="text" id="amount" required validate />
                       <label for="amount">Enter Amount</label>
                     </div>
                   </div>
 
-
-                  <div class="row">
-                    <div class="input-field">
-                      <select id="currency">
-                        <!-- <option value="" disabled selected>Amount</option> -->
-                        <option value="dollars">US Dollars</option>
-                        <option value="euros">Euros</option>
-                        <option value="pounds">Pounds</option>
-                      </select>
-                      <label>Pick Your Currency</label>
-                    </div>
-                  </div>
-
-                  <div class="row">
-                    <!-- <div class="input-field"> -->
-                      <label >
-                        <input name="duration" class="with-gap" id="one-time" type="radio" value="one-time" checked />
-                        <span>One Time Donation</span>
-                      </label>
-                    <!-- </div> -->
-                  </div>
-
-                  <div class="row">
-                    <!-- <div class="input-field"> -->
-                      <label >
-                        <input type="radio" value="recurring"  class="with-gap" id="recurring" name="duration"/>
-                        <span>Recurring Donation</span>
-                      </label>
-                    <!-- </div> -->
-                  </div>
-
-                  <div class="input-field">
                     <input
                       type="submit"
                       class="btn teal orange-text center lighten-3 modal-close"
@@ -128,13 +96,14 @@
 
     <script>
       const firebaseConfig = {
-        apiKey: "AIzaSyCAM2TgIq8dfhx08OvCtz4QULMYvp9HS-8",
-        authDomain: "taswell-f90e4.firebaseapp.com",
-        databaseURL: "https://taswell-f90e4.firebaseio.com",
-        projectId: "taswell-f90e4",
-        storageBucket: "taswell-f90e4.appspot.com",
-        messagingSenderId: "277717169423",
-        appId: "1:277717169423:web:ca937f0e05387e50703a7a",
+        apiKey: "AIzaSyCjaqU4B_pe0SQWxi2decSZMVSTR9O_hMM",
+        authDomain: "piog-dd672.firebaseapp.com",
+        databaseURL: "https://piog-dd672.firebaseio.com",
+        projectId: "piog-dd672",
+        storageBucket: "piog-dd672.appspot.com",
+        messagingSenderId: "714025795656",
+        appId: "1:714025795656:web:f409324e1c0d10b68d587d",
+        measurementId: "G-6ESN9MRZZX"
       };
 
       firebase.initializeApp(firebaseConfig);
@@ -145,8 +114,6 @@
       getContributionForm.addEventListener("submit", (e) => {
         e.preventDefault();
         const amount = document.querySelector("#amount").value;
-        // const currency = document.querySelector("#currency").value;
-        // const duration = document.querySelectorAll("[name=duration]").value;
         const contribution = functions.httpsCallable("getContribution");
         contribution({ amount }).then((result) => console.log(result));
       });
@@ -157,8 +124,6 @@
       document.addEventListener("DOMContentLoaded", function () {
         var elems = document.querySelectorAll(".modal");
         var instances = M.Modal.init(elems, {});
-        var select = document.querySelector("select");
-        const instances2 = M.FormSelect.init(select, {});
       });
     </script>
   </body>
