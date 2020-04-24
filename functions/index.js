@@ -57,7 +57,10 @@ exports.getContribution = functions.https.onCall((data, context) => {
   //     return data.amount;
   //   }
   // });
-  console.log('in getContribution');
+  console.log('in getContributions');
   console.log(data.amount);
-  return data.amount;
+  console.log(data.currency);
+  const mesg =`amount is ${data.amount} and currency is ${data.currency}`;
+  console.log(mesg);
+  return mesg;
 });
