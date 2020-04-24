@@ -28,7 +28,7 @@
         const getAuth = document.querySelector('#getAuth');
         const resp = document.querySelector('#resp');
         getAuth.addEventListener('click', () => {
-          console.log("before fetch");
+          console.log("before fetch")});
           fetch('https://us-central1-taswell-f90e4.cloudfunctions.net/app/helloworld', {
             headers: new Headers({
               'Auth': '44819bd32d8e799f3042d06ed0a3329632608c17'})
@@ -40,7 +40,6 @@
             console.log(data);
             resp.innerHTML = data;
           });
-        });
       </script>
 
     <section id="modal-materialize">
@@ -58,25 +57,44 @@
 
                   <div class="row">
                     <div class="input-field">
-                      <input type="email" id="email-1" required validate />
-                      <label for="email-1">Enter Amount</label>
+                      <input type="text" id="amount" required validate />
+                      <label for="amount">Enter Amount</label>
                     </div>
                   </div>
-
 
                   <div class="row">
                     <div class="input-field">
-                      <input type="password" id="password" required validate />
-                      <label for="password">Enter Password</label>
+                      <select name="currency" id="currency">
+                        <option value="" disabled selected>Select an option</option>
+                        <option value="dollars">Dollars</option>
+                        <option value="euros">Euros</option>
+                        <option value="pounds">Pounds</option>
+                      </select>
+                      <label for="currency">Select Currency</label>
                     </div>
                   </div>
 
-                  <div class="input-field">
-                    <input
-                      type="submit"
-                      class="btn teal orange-text center lighten-3 modal-close"
-                      value="Submit"
-                    />
+                    <p>
+                      <label>
+                        <input type="radio" name="duration" id="recurring" value="recurring" checked>
+                        <span>Recurring Donation</span>
+                      </label>
+                    </p>
+                    <p>
+                      <label>
+                        <input type="radio" name="duration" id="one-time" value="one-time">
+                        <span>One Time Donation</span>
+                      </label>
+                    </p>
+
+
+                  <input
+                    type="submit"
+                    class="btn teal orange-text center lighten-3 modal-close"
+                    value="Submit"
+                  />
+                  </div>
+
                   </div>
 
                 </form>
@@ -105,36 +123,53 @@
 
     <script>
       const firebaseConfig = {
-        apiKey: "AIzaSyCAM2TgIq8dfhx08OvCtz4QULMYvp9HS-8",
-        authDomain: "taswell-f90e4.firebaseapp.com",
-        databaseURL: "https://taswell-f90e4.firebaseio.com",
-        projectId: "taswell-f90e4",
-        storageBucket: "taswell-f90e4.appspot.com",
-        messagingSenderId: "277717169423",
-        appId: "1:277717169423:web:ca937f0e05387e50703a7a",
+        apiKey: "AIzaSyCjaqU4B_pe0SQWxi2decSZMVSTR9O_hMM",
+        authDomain: "piog-dd672.firebaseapp.com",
+        databaseURL: "https://piog-dd672.firebaseio.com",
+        projectId: "piog-dd672",
+        storageBucket: "piog-dd672.appspot.com",
+        messagingSenderId: "714025795656",
+        appId: "1:714025795656:web:f409324e1c0d10b68d587d",
+        measurementId: "G-6ESN9MRZZX"
       };
 
       firebase.initializeApp(firebaseConfig);
 
       const functions = firebase.functions();
-      const getUserForm = document.querySelector("#getUser");
-
-      getUserForm.addEventListener("submit", (e) => {
-        e.preventDefault();
-        const email = document.querySelector("#email-1").value;
-        const password = document.querySelector("#password").value;
-        const getUser = functions.httpsCallable("getUser");
-        getUser({ email, password }).then((result) => console.log(result));
-      });
     </script>
 
-      <!-- Initialize materialize javascript after DOM loads -->
     <script>
+      //  Initialize materialize javascript after DOM loads -->
       document.addEventListener("DOMContentLoaded", function () {
+
+        console.log('document loaded');
+
         var elems = document.querySelectorAll(".modal");
         var instances = M.Modal.init(elems, {});
-        var select = document.querySelector("select");
-        const instances2 = M.FormSelect.init(select, {});
+
+        var selectValues = document.querySelectorAll('select');
+        const selInstantances = M.FormSelect.init(selectValues, {});
+        
+        const getContributionForm = document.querySelector("#getContribution");
+        getContributionForm.addEventListener("submit", (e) => {
+          e.preventDefault();
+          const amount = document.querySelector("#amount").value;
+
+          const currencySelect = document.querySelector('#currency');
+          const currency = currencySelect.M_FormSelect.input.value;
+
+          let duration;
+          const radioSelector = document.querySelector('input[name="duration"]:checked');
+          if (radioSelector) {
+            duration = radioSelector.value;
+          }
+
+          console.log(`Before httpsCallable:  amount = ${amount} and currency = ${currency} and duration = ${duration}`);
+
+          const contribution = functions.httpsCallable("getContribution");
+            contribution({ amount, currency, duration})
+          .then(result => console.log(result));
+        });
       });
     </script>
   </body>
