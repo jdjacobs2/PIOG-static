@@ -74,6 +74,19 @@
                     </div>
                   </div>
 
+                    <p>
+                      <label>
+                        <input type="radio" name="duration" id="recurring" value="recurring" checked>
+                        <span>Recurring Donation</span>
+                      </label>
+                    </p>
+                    <p>
+                      <label>
+                        <input type="radio" name="duration" id="one-time" value="one-time">
+                        <span>One Time Donation</span>
+                      </label>
+                    </p>
+
 
                   <input
                     type="submit"
@@ -145,10 +158,16 @@
           const currencySelect = document.querySelector('#currency');
           const currency = currencySelect.M_FormSelect.input.value;
 
-          console.log(`amount = ${amount} and currency = ${currency}`);
+          let duration;
+          const radioSelector = document.querySelector('input[name="duration"]:checked');
+          if (radioSelector) {
+            duration = radioSelector.value;
+          }
+
+          console.log(`Before httpsCallable:  amount = ${amount} and currency = ${currency} and duration = ${duration}`);
 
           const contribution = functions.httpsCallable("getContribution");
-            contribution({ amount, currency})
+            contribution({ amount, currency, duration})
           .then(result => console.log(result));
         });
       });

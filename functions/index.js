@@ -60,7 +60,8 @@ exports.getContribution = functions.https.onCall((data, context) => {
   console.log('in getContributions');
   console.log(data.amount);
   console.log(data.currency);
-  const mesg =`amount is ${data.amount} and currency is ${data.currency}`;
+  console.log(data.duration);
+  const mesg =`amount is ${data.amount} and currency is ${data.currency} and duration = ${data.duration}`;
   console.log(mesg);
   return mesg;
 });
