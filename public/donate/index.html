@@ -168,6 +168,7 @@
 
           const contribution = functions.httpsCallable("getContribution");
             contribution({ amount, currency, duration})
+            // .then(result => result.json)
           .then(result => console.log(result));
         });
       });

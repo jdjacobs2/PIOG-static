@@ -4,7 +4,7 @@ const express = require("express");
 const cors = require("cors")({ origin: true });
 const multer = require("multer");
 const path = require("path");
-
+const stripe = require('stripe')('sk_test_Wpvw1nttzjNxrypDAZNSsdUR00RplHTNGs');
 // // Create and Deploy Your First Cloud Functions
 // // https://firebase.google.com/docs/functions/write-firebase-functions
 //
@@ -40,9 +40,18 @@ app.get("/helloworld", (req, res) => {
   }
   // res.send(`the key is ${key}`);
 });
+
+
+app.get('/secret', async (req, res) => {
+  const intent = // ... Fetch or create the PaymentIntent
+  res.json({client_secret: intent.client_secret});
+});
+
+
+
 exports.app = functions.https.onRequest(app);
 
-exports.getContribution = functions.https.onCall((data, context) => {
+exports.getContribution = functions.https.onCall(async (data, context) => {
   //   res.header("Access-Control-Allow-Origin", "*");
   //   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   //   if ( data.amount === 0) {
@@ -61,7 +70,20 @@ exports.getContribution = functions.https.onCall((data, context) => {
   console.log(data.amount);
   console.log(data.currency);
   console.log(data.duration);
-  const mesg =`amount is ${data.amount} and currency is ${data.currency} and duration = ${data.duration}`;
-  console.log(mesg);
-  return mesg;
+
+  const amount = parseInt(data.amount);
+
+  const paymentIntent = await stripe.paymentIntents.create({
+    
+    currency: 'usd',
+    amount: 1099,
+    // Verify your integration in this guide by including this parameter
+    metadata: {integration_check: 'accept_a_payment'},
+  });
+
+  if (paymentIntent) {
+    return paymentIntent;
+  } else {
+    return 'error:  no payment intent'
+  }
 });
