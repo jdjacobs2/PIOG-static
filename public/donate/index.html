@@ -7,8 +7,8 @@
     <!-- Compiled and minified CSS -->
     <link
       rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
-    />
+      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"/>
+      <script src="https://js.stripe.com/v3/"></script>
   </head>
   <body>
     <!-- use videos starting for following code https://www.youtube.com/watch?v=4wa3CMK4E2Y&list=PL4cUxeGkcC9jUPIes_B8vRjn1_GaplOPQ&index=18  
@@ -44,7 +44,7 @@
         });
       </script>
 
-    <section id="modal-materialize">
+    <section id="modal-materialize" class="center-align">
       <!-- Modal Trigger Button-->
       <a class="red waves-effect waves-light btn modal-trigger" href="#modal1"
         >Donate</a >
@@ -107,6 +107,30 @@
         </div>
       </div>
     </section>
+    
+    <!--payment section  -->
+      <a class="red waves-effect waves-light btn modal-trigger" href="#modal-elements"
+        >Donate</a 
+
+    <!--Stripe Elements section   -->
+    <section>
+            <div class="modal" id="modal-elements">
+              <div class="modal-content">
+                <div class="col s6">
+                  <form id="payment-form">
+                    <div id="card-element">
+                      <!-- Elements will create input elements here -->
+                    </div>
+                    <!-- We'll put the error messages in this element -->
+                    <div id="card-errors" role="alert">
+                    </div>
+                    <button id="submit">Pay</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+    </section>
+
 
     <!-- Compiled and minified JavaScript Materialize-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
@@ -121,8 +145,8 @@
     <script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-firestore.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.14.1/firebase-functions.js"></script>
 
-    <!-- Initialize Firebase Following is used when native Firebase hosting-- use below firebaseConfig and firebase.initializeApp -->
-    <!-- <script src="/__/firebase/init.js"></script> -->
+     <!-- Initialize Firebase Following is used when native Firebase hosting-- use below firebaseConfig and firebase.initializeApp -->
+   <!-- <script src="/__/firebase/init.js"></script> -->
 
     <script>
       const firebaseConfig = {
@@ -142,6 +166,14 @@
     </script>
 
     <script>
+      var stripe = Stripe('pk_test_a43QH27BoRD284Oo81fVv69b00ol5Iku1m');
+      var elements = stripe.elements();
+
+      // Create and mount Elements card--resource should have loaded
+      var card = elements.create("card", { style: style });
+      card.mount("#card-element");
+      console.log("Element card mounted");
+
       //  Initialize materialize javascript after DOM loads -->
       document.addEventListener("DOMContentLoaded", function () {
 
@@ -154,6 +186,8 @@
         const selInstantances = M.FormSelect.init(selectValues, {});
         
         const getContributionForm = document.querySelector("#getContribution");
+
+        // Retreive Payment Intent
         getContributionForm.addEventListener("submit", (e) => {
           e.preventDefault();
           const amount = document.querySelector("#amount").value;
@@ -174,8 +208,46 @@
             contribution({ amount, currency, duration})
             // .then(result => result.json)
           .then(result => console.log(result));
+
+          // Pop Up payment form
+                  // Open the Stripe Elements Card
+        // const modalElement = document.querySelector('#modal-element');
+        instances.forEach(instance => {
+          if (instance.id === 'modal-elements') {
+            instance.open();
+          }
         });
+
+        });
+
+
+        // const elementInstance = M.Modal.getInstance(modalElement);
+        
       });
+
+      // Set up Stripe.js and Elements to use in checkout form
+      var style = {
+        base: {
+          color: "#32325d",
+        }
+      };
+
+
+      card.addEventListener('change', ({error}) => {
+        const displayError = document.getElementById('card-errors');
+        if (error) {
+          displayError.textContent = error.message;
+        } else {
+          displayError.textContent = '';
+        }
+      });
+
+      // ----------------------------------------------------------
+      //Set your publishable key: remember to change this to your live publishable key in production
+      // See your keys here: https://dashboard.stripe.com/account/apikeys
+
+      // -----------------------------------------------------------
+
     </script>
   </body>
 </html>
