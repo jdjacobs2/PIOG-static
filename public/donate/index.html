@@ -28,17 +28,17 @@
         const getAuth = document.querySelector('#getAuth');
         const resp = document.querySelector('#resp');
         getAuth.addEventListener('click', () => {
-          console.log("before fetch")});
+          console.log("before fetch");
           fetch('https://us-central1-taswell-f90e4.cloudfunctions.net/app/helloworld', {
             headers: new Headers({
-              'Auth': '44819bd32d8e799f3042d06ed0a3329632608c17'})
+              'Auth': '44819bd32d8e799f3042d06ed0a3329632608c17'})})
+            .then(response => {
+              return response.text();
             })
-          .then(response => {
-            return response.text();
-          })
-          .then(data => {
-            console.log(data);
-            resp.innerHTML = data;
+            .then(data => {
+              console.log(data);
+              resp.innerHTML = data;
+            })
           });
       </script>
 
