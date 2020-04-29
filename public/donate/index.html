@@ -55,9 +55,10 @@
               <div class="col s6">
                 <form id="getContribution">
 
+                  // amount must be a whole integer in cents above 50 cents
                   <div class="row">
                     <div class="input-field">
-                      <input type="text" id="amount" required validate />
+                      <input type="number" id="amount" step="1" min="1" value="10" required validate />
                       <label for="amount">Enter Amount</label>
                     </div>
                   </div>
@@ -66,9 +67,10 @@
                     <div class="input-field">
                       <select name="currency" id="currency">
                         <option value="" disabled selected>Select an option</option>
-                        <option value="dollars">Dollars</option>
+                        <option value="us">US Dollars</option>
                         <option value="euros">Euros</option>
                         <option value="pounds">Pounds</option>
+                        <option value="canadian">Canadian Dollars</option>
                       </select>
                       <label for="currency">Select Currency</label>
                     </div>
@@ -105,9 +107,9 @@
       </div>
     </section>
     
-    <!--payment section  -->
+    <!-- payment section 
       <a class="red waves-effect waves-light btn modal-trigger" href="#modal-elements"
-        >Donate</a 
+        >Donate</a  -->
 
     <!--Stripe Elements section   -->
     <section>
@@ -176,22 +178,20 @@
 
         console.log('document loaded');
 
+        // Initialize Materialize modals and forms
         var elems = document.querySelectorAll(".modal");
         var instances = M.Modal.init(elems, {});
-
         var selectValues = document.querySelectorAll('select');
         const selInstantances = M.FormSelect.init(selectValues, {});
-        
-        const getContributionForm = document.querySelector("#getContribution");
 
-        // Retreive Payment Intent
+        // Gather date from intent to contribute form and Retreive Payment Intent
+        const getContributionForm =document.querySelector("#getContribution");
         getContributionForm.addEventListener("submit", (e) => {
           e.preventDefault();
-          const amount = document.querySelector("#amount").value;
 
+          const amount = parseInt(document.querySelector("#amount").value);
           const currencySelect = document.querySelector('#currency');
           const currency = currencySelect.M_FormSelect.input.value;
-
           let duration;
           const radioSelector = document.querySelector('input[name="duration"]:checked');
           if (radioSelector) {
@@ -205,20 +205,16 @@
             // .then(result => result.json)
           .then(result => console.log(result));
 
-          // Pop Up payment form
-                  // Open the Stripe Elements Card
+        // Pop Up payment form
+        // Open the Stripe Elements Card
         // const modalElement = document.querySelector('#modal-element');
-        instances.forEach(instance => {
-          if (instance.id === 'modal-elements') {
-            instance.open();
-          }
-        });
+        // instances.forEach(instance => {
+        //   if (instance.id === 'modal-elements') {
+        //     instance.open();
+        //   }
+        // });
 
         });
-
-
-        // const elementInstance = M.Modal.getInstance(modalElement);
-        
       });
 
       // Set up Stripe.js and Elements to use in checkout form

@@ -1,10 +1,12 @@
+/** @format */
+
 // const functions = require("firebase-functions");
 const functions = require("firebase-functions");
 const express = require("express");
 const cors = require("cors")({ origin: true });
-const multer = require("multer");
+// const multer = require("multer");
 const path = require("path");
-const stripe = require('stripe')('sk_test_Wpvw1nttzjNxrypDAZNSsdUR00RplHTNGs');
+const stripe = require("stripe")("sk_test_Wpvw1nttzjNxrypDAZNSsdUR00RplHTNGs");
 // // Create and Deploy Your First Cloud Functions
 // // https://firebase.google.com/docs/functions/write-firebase-functions
 //
@@ -41,13 +43,9 @@ app.get("/helloworld", (req, res) => {
   // res.send(`the key is ${key}`);
 });
 
-
-app.get('/secret', async (req, res) => {
-  const intent = // ... Fetch or create the PaymentIntent
-  res.json({client_secret: intent.client_secret});
+app.get("/secret", async (req, res) => {
+  const intent = res.json({ client_secret: intent.client_secret }); // ... Fetch or create the PaymentIntent
 });
-
-
 
 exports.app = functions.https.onRequest(app);
 
@@ -66,24 +64,44 @@ exports.getContribution = functions.https.onCall(async (data, context) => {
   //     return data.amount;
   //   }
   // });
-  console.log('in getContributions');
+  console.log("in getContributions");
   console.log(data.amount);
   console.log(data.currency);
   console.log(data.duration);
 
   const amount = parseInt(data.amount);
+  let currency;
+  switch (data.currency) {
+    case "US Dollars":
+      currency = "usd";
+      break;
+    case "Pounds":
+      currency = "gbp";
+      break;
+    case "Canadian Dollars":
+      currency = "cad";
+      break;
+    case "Euros":
+      currency = "eur";
+      break;
+    default:
+      console.log("Invalid currency");
+  }
+
+  console.log(`currency is ${currency} and amount is ${amount}`);
 
   const paymentIntent = await stripe.paymentIntents.create({
-    
-    currency: 'usd',
-    amount: 1099,
+    currency: currency,
+    amount: amount,
     // Verify your integration in this guide by including this parameter
-    metadata: {integration_check: 'accept_a_payment'},
+    metadata: { integration_check: "accept_a_payment" },
   });
+
+  // return 'out of index.js';
 
   if (paymentIntent) {
     return paymentIntent;
   } else {
-    return 'error:  no payment intent'
+    return "error:  no payment intent";
   }
 });
