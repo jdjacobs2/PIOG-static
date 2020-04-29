@@ -22,14 +22,13 @@
       </div>
 
       <p id="resp" style="margin-bottom: 30px;"></p>
-    </section>
       
 
       <script>
         const getAuth = document.querySelector('#getAuth');
         const resp = document.querySelector('#resp');
         getAuth.addEventListener('click', () => {
-          console.log("before fetch");
+          console.log("before fetch")});
           fetch('https://us-central1-taswell-f90e4.cloudfunctions.net/app/helloworld', {
             headers: new Headers({
               'Auth': '44819bd32d8e799f3042d06ed0a3329632608c17'})
@@ -41,7 +40,6 @@
             console.log(data);
             resp.innerHTML = data;
           });
-        });
       </script>
 
     <section id="modal-materialize" class="center-align">
