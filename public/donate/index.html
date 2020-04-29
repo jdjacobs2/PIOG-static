@@ -66,10 +66,9 @@
                     <div class="input-field">
                       <select name="currency" id="currency">
                         <option value="" disabled selected>Select an option</option>
-                        <option value="usd">US Dollars</option>
-                        <option value="cad">Canadian Dollar</option>
-                        <option value="eur">Euros</option>
-                        <option value="gbp">Pounds</option>
+                        <option value="dollars">Dollars</option>
+                        <option value="euros">Euros</option>
+                        <option value="pounds">Pounds</option>
                       </select>
                       <label for="currency">Select Currency</label>
                     </div>
@@ -192,7 +191,6 @@
 
           const currencySelect = document.querySelector('#currency');
           const currency = currencySelect.M_FormSelect.input.value;
-          console.log('currency befoe httpsCallable = ', currency);
 
           let duration;
           const radioSelector = document.querySelector('input[name="duration"]:checked');
