@@ -9,10 +9,21 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"/>
       <script src="https://js.stripe.com/v3/"></script>
+
   </head>
   <body>
     <!-- use videos starting for following code https://www.youtube.com/watch?v=4wa3CMK4E2Y&list=PL4cUxeGkcC9jUPIes_B8vRjn1_GaplOPQ&index=18  
     code is also at https://github.com/iamshaunjp/firebase-auth/tree/lesson-18-->
+<style>
+  input:valid {
+    background-color: lightblue;
+  }
+
+  input:invalid {
+    background-color: salmon;
+  }
+</style>
+
 
     <h2 class="center-align"  style="color:green">Please Donate</h2>
 
@@ -55,10 +66,10 @@
               <div class="col s6">
                 <form id="getContribution">
 
-                  // amount must be a whole integer in cents above 50 cents
+                  <!-- amount must be a whole integer in cents above 50 cents -->
                   <div class="row">
                     <div class="input-field">
-                      <input type="number" id="amount" step="1" min="1" value="10" required validate />
+                      <input type="number" id="amount"   required />
                       <label for="amount">Enter Amount</label>
                     </div>
                   </div>
@@ -89,11 +100,11 @@
                       </label>
                     </p>
 
-
                   <input
                     type="submit"
                     class="btn teal orange-text center lighten-3 modal-close"
                     value="Submit"
+                    id="subDonation"
                   />
                   </div>
 
@@ -106,6 +117,32 @@
         </div>
       </div>
     </section>
+
+    <script>
+      // const submit = document.querySelector('#subDonation');
+      // submit.addEventListener('click', 
+      //   function validate(e) {
+      //     e.preventDefault();
+      //     const amtInput = document.querySelector('#amount');
+      //     let value = amtInput.value * 1;
+      //     // amtInput.className = "validate";
+      //     // console.log(value);
+      //     const isInteger = value === Math.floor(value)
+      //     if (isInteger) {
+      //       if ( value * 100 >= 50){
+      //         value = value * 100;
+      //         value = value.toString();
+      //         amtInput.className += " valid";
+      //         console.log(amtInput.className);
+      //       }
+      //     } else {
+      //       // amtInput.className += " invalid";
+      //       amtInput.setCustomValidity("Enter interger amount greater that $.50");
+      //       amtInput.focus();
+      //     }
+      //   });
+
+    </script>
     
     <!-- payment section 
       <a class="red waves-effect waves-light btn modal-trigger" href="#modal-elements"
