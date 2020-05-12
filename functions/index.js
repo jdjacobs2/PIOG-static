@@ -42,7 +42,7 @@ app.get('/helloworld', (req, res) => {
   // } else {
   //   res.status(400).send("Error 400: Bad key");
   // }
-  res.send(`Firebase says hello`);
+  res.send(`I want to donate`);
 });
 
 app.get('/secret', async (req, res) => {
