@@ -27,21 +27,7 @@ app.use(cors);
 app.use(express.static(path.resolve(__dirname, '../public')));
 app.use(bodyParser());
 
-// test of get using custom key
-// from:  https://medium.com/@nschairer/how-to-protect-firebase-https-cloud-functions-f12d1a22370d
 app.get('/helloworld', (req, res) => {
-  // const key = functions.config().helloworld.key;
-  // console.log("the key is ", key);
-  // // const req_key = req.header('auth');
-  // const { headers } = req;
-  // req_key = headers["auth"];
-  // console.log("req_key:", req_key);
-  // console.log("headers:", req.headers);
-  // if (key === req_key) {
-  //   res.status(200).send("Hello from Firebase!");
-  // } else {
-  //   res.status(400).send("Error 400: Bad key");
-  // }
   res.send(`I want to donate`);
 });
 
@@ -55,31 +41,20 @@ app.post('/charge', (req, res) => {
   // res.send('Reached route /charge')
 });
 
-exports.app = functions.https.onRequest(app);
+app.post('/contribution', async (req, res) => {
+  // exports.getContribution = functions.https.onCall(async (data, context) => {
 
-exports.getContribution = functions.https.onCall(async (data, context) => {
-  //   res.header("Access-Control-Allow-Origin", "*");
-  //   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  //   if ( data.amount === 0) {
-  //     // Throwing an HttpsError so that the client gets the error details.
-  //     throw new functions.https.HttpsError(
-  //       "invalid-argument",
-  //       "The function must be called with " +
-  //         'one arguments "text" containing the message text to add.'
-  //     );
-  //   } else {
-  //     console.log(data.amount, data.currency);
-  //     return data.amount;
-  //   }
-  // });
-  console.log('in getContributions');
-  console.log(data.amount);
-  console.log(data.currency);
-  console.log(data.duration);
+  res.header('Access-Control-Allow-Origin', '*');
+  console.log('in Contributions');
+  console.log('req.body is > ', req.body);
+  console.log(req.body.data.amount);
+  console.log(req.body.data.currency);
+  console.log(req.body.data.duration);
 
-  const amount = parseInt(data.amount);
+  const amount = parseInt(req.body.data.amount);
+  console.log('after parseInt amount = ', amount);
   let currency;
-  switch (data.currency) {
+  switch (req.body.data.currency) {
     case 'US Dollars':
       currency = 'usd';
       break;
@@ -96,20 +71,23 @@ exports.getContribution = functions.https.onCall(async (data, context) => {
       console.log('Invalid currency');
   }
 
-  console.log(`currency is ${currency} and amount is ${amount}`);
-
+  console.log('currency is ', currency, ' and amount is ', amount);
+  
   const paymentIntent = await stripe.paymentIntents.create({
     currency: currency,
     amount: amount,
     // Verify your integration in this guide by including this parameter
     metadata: { integration_check: 'accept_a_payment' }
-  });
+  })
+    .then(response => res.json(response));
+  // req.json(paymentIntent);
 
-  // return 'out of index.js';
 
-  if (paymentIntent) {
-    return paymentIntent;
-  } else {
-    return 'error:  no payment intent';
-  }
+  // res.send(`currency is ${currency} and amount is ${amount}`);
+
 });
+  
+  
+  
+  
+exports.app = functions.https.onRequest(app);

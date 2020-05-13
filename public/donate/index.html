@@ -8,7 +8,8 @@
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"/>
-      <script src="https://js.stripe.com/v3/"></script>
+    <script src="https://js.stripe.com/v3/"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
   </head>
   <body>
@@ -237,20 +238,14 @@
 
           console.log(`Before httpsCallable:  amount = ${amount} and currency = ${currency} and duration = ${duration}`);
 
-          const contribution = functions.httpsCallable("getContribution");
-            contribution({ amount, currency, duration})
-            // .then(result => result.json)
-          .then(result => console.log(result));
-
-        // Pop Up payment form
-        // Open the Stripe Elements Card
-        // const modalElement = document.querySelector('#modal-element');
-        // instances.forEach(instance => {
-        //   if (instance.id === 'modal-elements') {
-        //     instance.open();
-        //   }
-        // });
-
+          axios.post('https://us-central1-piog-dd672.cloudfunctions.net/app/contribution', {
+            data: {amount, currency, duration}
+          })
+          .then(response => console.log(response.data));
+          // const contribution = functions.httpsCallable("getContribution");
+          //   contribution({ amount, currency, duration})
+          //   // .then(result => result.json)
+          // .then(result => console.log(result));
         });
       });
 
