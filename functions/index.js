@@ -8,18 +8,6 @@ const bodyParser = require('body-parser');
 // const multer = require("multer");
 const path = require('path');
 const stripe = require('stripe')('sk_test_Wpvw1nttzjNxrypDAZNSsdUR00RplHTNGs');
-// // Create and Deploy Your First Cloud Functions
-// // https://firebase.google.com/docs/functions/write-firebase-functions
-//
-// exports.helloWorld = functions.https.onRequest((request, response) => {
-//  response.send("Hello from Firebase!");
-// });
-
-// exports.getMessage = functions.https.onRequest((req, resp) => {
-//   resp.set("Access-Control-Allow-Origin", "*");
-//   console.log("Success");
-//   resp.send("From getMessage");
-// });
 
 const app = express();
 app.use(cors);
@@ -33,12 +21,6 @@ app.get('/helloworld', (req, res) => {
 
 app.get('/secret', async (req, res) => {
   const intent = res.json({ client_secret: intent.client_secret }); // ... Fetch or create the PaymentIntent
-});
-
-app.post('/charge', (req, res) => {
-  console.log(req.body);
-  res.json(req.body);
-  // res.send('Reached route /charge')
 });
 
 app.post('/contribution', async (req, res) => {
@@ -79,15 +61,8 @@ app.post('/contribution', async (req, res) => {
     // Verify your integration in this guide by including this parameter
     metadata: { integration_check: 'accept_a_payment' }
   })
-    .then(response => res.json(response));
-  // req.json(paymentIntent);
-
-
-  // res.send(`currency is ${currency} and amount is ${amount}`);
-
+    .then(response => res.json(response))
+    .catch(err => res.json(err));
 });
-  
-  
-  
   
 exports.app = functions.https.onRequest(app);
