@@ -37,16 +37,16 @@ app.post('/contribution', async (req, res) => {
   console.log('after parseInt amount = ', amount);
   let currency;
   switch (req.body.data.currency) {
-    case 'US Dollars':
+    case 'US Dollar':
       currency = 'usd';
       break;
-    case 'Pounds':
+    case 'Pound':
       currency = 'gbp';
       break;
-    case 'Canadian Dollars':
+    case 'Canadian Dollar':
       currency = 'cad';
       break;
-    case 'Euros':
+    case 'Euro':
       currency = 'eur';
       break;
     default:
@@ -55,7 +55,7 @@ app.post('/contribution', async (req, res) => {
 
   console.log('currency is ', currency, ' and amount is ', amount);
   
-  const paymentIntent = await stripe.paymentIntents.create({
+  stripe.paymentIntents.create({
     currency: currency,
     amount: amount,
     // Verify your integration in this guide by including this parameter

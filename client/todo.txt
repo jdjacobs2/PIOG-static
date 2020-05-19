@@ -1,0 +1,4 @@
+Payment.js:
+  change from materilize to material-ui
+
+Take info from Intention.js and get stripe paymentIntent object
