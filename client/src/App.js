@@ -1,14 +1,16 @@
-import React, { useState, useEffect,useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 // import Hello from './Hello';
-// import { Elements } from '@stripe/react-stripe-js';
-// import { loadStripe } from '@stripe/stripe-js';
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
 // import CheckoutForm from './CheckoutForm';
 import Intention from './components/Intention';
+import ConfirmOrderForm from './components/ConfirmOrderForm';
+import StripeCardSectionF from './components/StripeCardSectionF';
+
+const stripePromise = loadStripe('pk_test_a43QH27BoRD284Oo81fVv69b00ol5Iku1m');
 
 const App = () => {
-  // const stripePromise = loadStripe('pk_test_a43QH27BoRD284Oo81fVv69b00ol5Iku1m');
-
   const firstMount = useRef(true);
 
   const [amount, setAmount] = useState(10);
@@ -68,26 +70,28 @@ const App = () => {
   }, [donate]);
 
   return (
-    <div className='App'>
-      <header>
-        <p>From React App</p>
-      </header>
-      {/* <Hello /> */}
-      <Intention
-        amount={handleAmount}
-        amt={amount}
-        currency={handleCurrency}
-        cur={currency}
-        duration={handleDuration}
-        dur={duration}
-        open={open}
-        clickOpen={handleClickOpen}
-        close={handleClose}
-      />
-      {/* <Elements stripe={stripePromise}>
-        <CheckoutForm />
-      </Elements> */}
-    </div>
+    <Elements stripe={stripePromise}>
+      <div className='App'>
+        <header>
+          <p>From React App</p>
+        </header>
+        {/* <Hello /> */}
+        {/* <Intention
+          amount={handleAmount}
+          amt={amount}
+          currency={handleCurrency}
+          cur={currency}
+          duration={handleDuration}
+          dur={duration}
+          open={open}
+          clickOpen={handleClickOpen}
+          close={handleClose}
+        />
+        <ConfirmOrderForm paymentIntent={data} /> */}
+        <StripeCardSectionF /> 
+      </div>
+
+    </Elements>
   );
 };
 
