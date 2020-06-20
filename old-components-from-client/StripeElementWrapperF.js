@@ -2,15 +2,15 @@
 // Similar to Material UI's <TextField>. Handles focused, empty and error state
 // to correctly show the floating label and error messages etc.
 
-import React, { makeStyles, useState } from 'react';
-import PropTypes from 'prop-types';
+import React, { useState } from 'react';
+// import PropTypes from 'prop-types';
 
 import FormControl from '@material-ui/core/FormControl';
-import { Input, InputLabel } from '@material-ui/core';
+import { Input, InputLabel, TextField } from '@material-ui/core';
 
 import StripeInputF from './StripeInputF';
 import Error from './Error';
-import StripeElementWrapper from './xStripeElementWrapper';
+import StripeElementWrapper from './StripeElementWrapperF';
 
 const StripeElementWrapperF = props => {
   const { component, label } = props;
@@ -34,7 +34,36 @@ const StripeElementWrapperF = props => {
 
   return (
     <div>
-      <FormControl fullWidth margin='normal'>
+      <TextField
+        label={label}
+        name='ccnumber'
+        variant='outlined'
+        required
+        fullWidth
+        InputLabelProps={{ shrink: true }}
+        InputProps={{
+          inputComponent: StripeInputF,
+          inputProps: {
+            component: { component }
+          }
+        }}
+      />
+
+      {/* <Error /> */}
+    </div>
+  );
+};
+
+// StripeElementWrapper.propTypes = {
+//   component: PropTypes.func.isRequired,
+//   label: PropTypes.string.isRequired
+// };
+
+StripeElementWrapperF.displayName = 'StripeElementWrapperF';
+
+export default StripeElementWrapperF;
+
+      {/* <FormControl fullWidth margin='normal'>
         <InputLabel
           focused={focused}
           shrink={focused || !empty}
@@ -51,17 +80,4 @@ const StripeElementWrapperF = props => {
           inputProps={{ component }}
           // margin={{marginTop:'25px'}}
         />
-      </FormControl>
-      <Error />
-    </div>
-  );
-};
-
-StripeElementWrapper.propTypes = {
-  component: PropTypes.func.isRequired,
-  label: PropTypes.string.isRequired
-};
-
-StripeElementWrapper.displayName = 'StripeElementWrapper';
-
-export default StripeElementWrapperF;
+      </FormControl> */}

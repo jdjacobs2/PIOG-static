@@ -5,7 +5,7 @@ import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 // import CheckoutForm from './CheckoutForm';
 import Intention from './components/Intention';
-import ConfirmOrderForm from './components/ConfirmOrderForm';
+// import ConfirmOrderForm from './components/ConfirmOrderForm';
 import StripeCardSectionF from './components/StripeCardSectionF';
 
 const stripePromise = loadStripe('pk_test_a43QH27BoRD284Oo81fVv69b00ol5Iku1m');
@@ -21,16 +21,33 @@ const App = () => {
 
   const [open, setOpen] = useState(false);
 
+  const [openCard, setOpenCard] = useState(false);
+
   const [donate, setDonate] = useState(false);
 
   const [data, setData] = useState('jk');
+
+  const [step, setStep] = useState(0);
 
   const handleClickOpen = () => {
     setOpen(true);
   };
 
+  const handleOpenCard = () => {
+    console.log('in handleOpenCard');
+    setOpenCard(true);
+  };
+
+  const handleDonateCardClick = () => {
+    setOpenCard(false);
+    //  add additional donate card here
+  };
+
+  const handleCloseCardClick = () => {
+    setOpenCard(false);
+  };
+
   const handleClose = (e, func) => {
-    console.log(`error is ${e.target.lastChild} and func is ${func}`);
     if (func === 'donate') {
       setDonate(true);
     }
@@ -46,12 +63,17 @@ const App = () => {
   };
 
   const handleAmount = event => {
-    console.log(event.target.value);
     setAmount(event.target.value);
   };
 
   useEffect(() => {
-    console.log('In useEffect:  ', amount, currency);
+    if (data !== 'jk') {
+      console.log('in useEffect for setOpenCard', data);
+      setOpenCard(true);
+    }
+  }, [data]);
+
+  useEffect(() => {
     if (firstMount.current) {
       firstMount.current = false;
       return;
@@ -72,11 +94,11 @@ const App = () => {
   return (
     <Elements stripe={stripePromise}>
       <div className='App'>
-        <header>
+        {/* <header>
           <p>From React App</p>
-        </header>
+        </header> */}
         {/* <Hello /> */}
-        {/* <Intention
+        <Intention
           amount={handleAmount}
           amt={amount}
           currency={handleCurrency}
@@ -87,10 +109,14 @@ const App = () => {
           clickOpen={handleClickOpen}
           close={handleClose}
         />
-        <ConfirmOrderForm paymentIntent={data} /> */}
-        <StripeCardSectionF /> 
+        <StripeCardSectionF
+          paymentIntent={data}
+          open={openCard}
+          clickCardOpen={handleOpenCard}
+          clickClose={handleCloseCardClick}
+          clickDonate={handleDonateCardClick}
+        />
       </div>
-
     </Elements>
   );
 };

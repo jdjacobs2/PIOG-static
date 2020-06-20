@@ -6,30 +6,29 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import TextField from '@material-ui/core/TextField';
-import { makeStyles } from '@material-ui/core/styles';
+// import { makeStyles } from '@material-ui/core/styles';
 import FormControl from '@material-ui/core/FormControl';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormLabel from '@material-ui/core/FormLabel';
 import Radio from '@material-ui/core/Radio';
 
-const useStyles = makeStyles(theme => ({
-  formControl: {
-    margin: theme.spacing(1),
-    minWidth: 120,
-    color: 'gray'
-  },
-  selectEmpty: {
-    marginTop: theme.spacing(2)
-  },
-  textField: {
-    color: 'gray'
-  }
-}));
+// const useStyles = makeStyles(theme => ({
+//   formControl: {
+//     margin: theme.spacing(1),
+//     minWidth: 120,
+//     color: 'gray'
+//   },
+//   selectEmpty: {
+//     marginTop: theme.spacing(2)
+//   },
+//   textField: {
+//     color: 'gray'
+//   }
+// }));
 
 function Intention(props) {
 
-  const classes = useStyles();
 
   return (
     <Fragment>
@@ -37,7 +36,7 @@ function Intention(props) {
         Open form dialog
       </Button>
       <Dialog open={props.open} onClose={props.close}>
-        <DialogTitle id='form-dialog-title'>DONATE</DialogTitle>
+        <DialogTitle id='form-dialog-title'>DONATE FORM</DialogTitle>
         <DialogContent>
           <DialogContentText>
             To donate please fill out this form and the next. Only Stripe,
@@ -103,7 +102,7 @@ function Intention(props) {
               />
               <FormControlLabel
                 value='Euro'
-                control={<Radio />} l
+                control={<Radio />} 
                 label='Euro' />
               <FormControlLabel
                 value='Pound'
