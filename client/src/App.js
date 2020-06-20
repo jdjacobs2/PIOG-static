@@ -7,6 +7,7 @@ import { loadStripe } from '@stripe/stripe-js';
 import Intention from './components/Intention';
 // import ConfirmOrderForm from './components/ConfirmOrderForm';
 import StripeCardSectionF from './components/StripeCardSectionF';
+import Spinner from './components/Spinner';
 
 const stripePromise = loadStripe('pk_test_a43QH27BoRD284Oo81fVv69b00ol5Iku1m');
 
@@ -23,20 +24,22 @@ const App = () => {
 
   const [openCard, setOpenCard] = useState(false);
 
-  const [donate, setDonate] = useState(false);
+  // const [donate, setDonate] = useState(false);
 
   const [data, setData] = useState('jk');
 
   const [step, setStep] = useState(0);
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
+  const [loading, setLoading] = useState(false);
 
-  const handleOpenCard = () => {
-    console.log('in handleOpenCard');
-    setOpenCard(true);
-  };
+  // const handleClickOpen = () => {
+  //   setOpen(true);
+  // };
+
+  // const handleOpenCard = () => {
+  //   console.log('in handleOpenCard');
+  //   setOpenCard(true);
+  // };
 
   const handleDonateCardClick = () => {
     setOpenCard(false);
@@ -48,10 +51,12 @@ const App = () => {
   };
 
   const handleClose = (e, func) => {
-    if (func === 'donate') {
-      setDonate(true);
-    }
-    setOpen(false);
+    // if (func === 'donate') {
+    //   setDonate(true);
+    // }
+    setStep(1);
+    setLoading(true);
+    // setOpen(false);
   };
 
   const handleDuration = event => {
@@ -67,6 +72,11 @@ const App = () => {
   };
 
   useEffect(() => {
+    if (loading) {
+    }
+  });
+
+  useEffect(() => {
     if (data !== 'jk') {
       console.log('in useEffect for setOpenCard', data);
       setOpenCard(true);
@@ -74,22 +84,36 @@ const App = () => {
   }, [data]);
 
   useEffect(() => {
-    if (firstMount.current) {
+    // Only execute fetchData during and after first mount of Intention
+    if (firstMount.current && step !== 1) {
       firstMount.current = false;
       return;
     }
     async function fetchData() {
-      let response = await axios.post(
-        'https://us-central1-piog-dd672.cloudfunctions.net/app/contribution',
-        {
-          data: { amount, currency, duration }
+      try {
+        let response = await axios.post(
+          'https://us-central1-piog-dd672.cloudfunctions.net/app/contribution',
+          {
+            data: { amount, currency, duration }
+          }
+        );
+        if (response.data.id) {
+          setData(response.data);
+          setStep(2);
+          // console.log('logging data.id', response.data.id);
+        } else if (response.data.type) {
+          setData(response.data);
+          setStep(3);
+          // console.log('logging data.type', response.data.type);
         }
-      );
-      setData(response.data);
-      console.log('logging data', response.data);
+      } catch (e) {
+        console.log('error in getting paymentIntent:', e);
+      }
+      setLoading(false);
     }
+
     fetchData();
-  }, [donate]);
+  }, [loading]);
 
   return (
     <Elements stripe={stripePromise}>
@@ -105,17 +129,19 @@ const App = () => {
           cur={currency}
           duration={handleDuration}
           dur={duration}
-          open={open}
-          clickOpen={handleClickOpen}
+          open={!step}
+          // clickOpen={handleClickOpen}
           close={handleClose}
         />
+        {loading ? <Spinner /> : null}
         <StripeCardSectionF
           paymentIntent={data}
-          open={openCard}
-          clickCardOpen={handleOpenCard}
+          open={step === 1 ? true : false}
+          // clickCardOpen={handleOpenCard}
           clickClose={handleCloseCardClick}
           clickDonate={handleDonateCardClick}
         />
+        {step === 3 ? <h1>'Mininum Donation is US $5'</h1>: null}
       </div>
     </Elements>
   );

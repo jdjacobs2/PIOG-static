@@ -42,22 +42,6 @@ function Intention(props) {
             To donate please fill out this form and the next. Only Stripe,
             PIOG's billing service, will see or retain any personal information.
           </DialogContentText>
-          {/* <TextField
-              autoFocus
-              margin='dense'
-              id='email'
-              label='Email Address'
-              type='email'
-              fullWidth
-            />
-            <TextField
-              autoFocus
-              margin='dense'
-              id='name'
-              label='Name'
-              type='text'
-              fullWidth
-            /> */}
           <br />
           <FormControl component='fieldset'>
             <FormLabel component='legend'>Duration</FormLabel>
