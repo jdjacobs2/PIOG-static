@@ -8,6 +8,7 @@ import Intention from './components/Intention';
 // import ConfirmOrderForm from './components/ConfirmOrderForm';
 import StripeCardSectionF from './components/StripeCardSectionF';
 import Spinner from './components/Spinner';
+import Success from './components/Success';
 
 const stripePromise = loadStripe('pk_test_a43QH27BoRD284Oo81fVv69b00ol5Iku1m');
 
@@ -33,6 +34,8 @@ const App = () => {
   const [step, setStep] = useState(0);
 
   const [loading, setLoading] = useState(false);
+
+  const [success, setSuccess] = useState(false);
 
   const handleClickOpen = () => {
     setStep(2);
@@ -152,8 +155,11 @@ const App = () => {
           clickClose={handleCloseCardClick}
           clickDonate={handleDonateCardClick}
           clickEmail={handleEmailClick}
+          setSuccess={setSuccess}
+          setStep={setStep}
         />
         {step === 3 ? <h1>'Mininum Donation is US $5'</h1>: null}
+        {success ? <Success /> : null}
       </div>
     </Elements>
   );

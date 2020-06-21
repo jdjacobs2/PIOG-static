@@ -74,6 +74,8 @@ const CardSectionF = props => {
     } else {
       // The payment has been processed!
       if (result.paymentIntent.status === 'succeeded') {
+        props.setSuccess(true);
+        props.setStep(99);
         console.log('SUCCESS');
         // Show a success message to your customer
         // There's a risk of the customer closing the window before callback
