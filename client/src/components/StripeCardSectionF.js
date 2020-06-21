@@ -105,7 +105,7 @@ const CardSectionF = props => {
             retain any personal information.
           </DialogContentText>
           <Grid container justify='center' style={{display:'flex'}}>
-            <Grid className={classes.root} item xs={12} md={4}>
+            <Grid className={classes.root} item xs={12} md={5}>
               <TextField
                 className={classes.root}
                 label='Credit Card Number'
@@ -124,7 +124,7 @@ const CardSectionF = props => {
                 }}
               />
             </Grid>
-            <Grid className={classes.root} sitem xs={12} md={4}>
+            <Grid className={classes.root} sitem xs={12} md={5}>
               <TextField
                 className={classes.root}
                 label='Expiry'
@@ -147,7 +147,7 @@ const CardSectionF = props => {
             </Grid>
           </Grid>
           <Grid container justify='center'style={{display:'flex'}}>
-            <Grid className={classes.root} item xs={12} md={4}>
+            <Grid className={classes.root} item xs={12} md={5}>
               <TextField
                 className={classes.root}
                 label='CVC'
@@ -165,7 +165,7 @@ const CardSectionF = props => {
                 }}
               />
             </Grid>
-            <Grid className={classes.root} item xs={12} md={4}>
+            <Grid className={classes.root} item xs={12} md={5}>
               <TextField
                 className={classes.root}
                 label='email'

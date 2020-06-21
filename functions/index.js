@@ -54,15 +54,18 @@ app.post('/contribution', async (req, res) => {
   }
 
   console.log('currency is ', currency, ' and amount is ', amount);
-  
-  stripe.paymentIntents.create({
-    currency: currency,
-    amount: amount,
-    // Verify your integration in this guide by including this parameter
-    metadata: { integration_check: 'accept_a_payment' }
-  })
+
+  stripe.paymentIntents
+    .create({
+      currency: currency,
+      amount: amount,
+      payment_method_types: ['card'],
+      statement_descriptor: 'Pass It On Guatemala',
+      // Verify your integration in this guide by including this parameter
+      // metadata: { integration_check: 'accept_a_payment' }
+    })
     .then(response => res.json(response))
     .catch(err => res.json(err));
 });
-  
+
 exports.app = functions.https.onRequest(app);
