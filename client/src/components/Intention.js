@@ -39,8 +39,7 @@ function Intention(props) {
         <DialogTitle id='form-dialog-title'>DONATE FORM</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            To donate please fill out this form and the next. Only Stripe,
-            PIOG's billing service, will see or retain any personal information.
+            To donate please fill indicate the amount you wish to donate and whether it is a one time donation or a monthly recurring donation.  Per requirment of Stripe, our on-line payment provider, the minimum donation is US $5 or equivalent. 
           </DialogContentText>
           <br />
           <FormControl component='fieldset'>

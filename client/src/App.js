@@ -20,6 +20,8 @@ const App = () => {
 
   const [duration, setDuration] = useState('recurring');
 
+  const [email, setEmail] = useState('');
+
   const [open, setOpen] = useState(false);
 
   const [openCard, setOpenCard] = useState(false);
@@ -32,14 +34,19 @@ const App = () => {
 
   const [loading, setLoading] = useState(false);
 
-  // const handleClickOpen = () => {
-  //   setOpen(true);
-  // };
+  const handleClickOpen = () => {
+    setStep(2);
 
-  // const handleOpenCard = () => {
-  //   console.log('in handleOpenCard');
-  //   setOpenCard(true);
-  // };
+  };
+
+  const handleEmailClick = event => {
+    setEmail(event.target.value);
+  }
+
+  const handleOpenCard = () => {
+    console.log('in handleOpenCard');
+    setStep(2);
+  };
 
   const handleDonateCardClick = () => {
     setOpenCard(false);
@@ -70,6 +77,10 @@ const App = () => {
   const handleAmount = event => {
     setAmount(event.target.value);
   };
+
+  useEffect(() => {
+    console.log(`step is: ${step}`);
+  });
 
   useEffect(() => {
     if (loading) {
@@ -136,10 +147,11 @@ const App = () => {
         {loading ? <Spinner /> : null}
         <StripeCardSectionF
           paymentIntent={data}
-          open={step === 1 ? true : false}
-          // clickCardOpen={handleOpenCard}
+          open={step === 2 ? true : false}
+          clickCardOpen={handleOpenCard}
           clickClose={handleCloseCardClick}
           clickDonate={handleDonateCardClick}
+          clickEmail={handleEmailClick}
         />
         {step === 3 ? <h1>'Mininum Donation is US $5'</h1>: null}
       </div>

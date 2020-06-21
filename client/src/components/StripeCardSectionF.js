@@ -6,7 +6,10 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  TextField
+  DialogContentText,
+  DialogTitle,
+  TextField,
+  Paper
 } from '@material-ui/core';
 // import StripeElementWrapperF from './StripeElementWrapperF';
 import { useStripe, useElements, cardNumber } from '@stripe/react-stripe-js';
@@ -22,18 +25,18 @@ const useStyles = makeStyles(theme => ({
   root: {
     '& .MuiTextField-root': {
       margin: theme.spacing(1),
-      width: '25ch',
-      marginBottom: '40px'
+      // width: '25ch',
+      marginBottom: '20px'
     },
-    '& .MuiGrid': {
-      margin: '40px'
+    '& > .MuiDialog-container > .MuiPaper-root': {
+      minHeight: '380px'
     },
+    // '& .MuiGrid': {
+    //   margin: '40px'
+    // },
     display: 'flex',
     flexGrow: 1
   },
-  control: {
-    padding: theme.spacing(3)
-  }
 }));
 
 // Principal export component
@@ -86,24 +89,31 @@ const CardSectionF = props => {
       <Button variant='outlined' color='primary' onClick={props.clickCardOpen}>
         Open Card Dialog
       </Button>
+      {/* <Paper variant='elevation' elevation={4} style={{ minHeight: 750 }}> */}
       <Dialog
         open={props.open}
-        PaperProps={{ variant: 'outlined' }}
-        fullWidth={true}
+        className={classes.root}
+        PaperProps={{ variant: 'elevation', elevation: 5 }}
+        // fullWidth={true}
       >
+        <DialogTitle id='form-dialog-title'>PAYMENT FORM</DialogTitle>
+
         <DialogContent>
-          <Grid container justify='center'>
-            <Grid className={classes.root} item xs={8}>
-              {/* <StripeElementWrapperF
-                label='Card Number'
-                component={CardNumberElement}
-              /> */}
+          <DialogContentText>
+            To donate please complete this form with your credit card infomation
+            and email. Only Stripe, PIOG's on-line payment provider, will see or
+            retain any personal information.
+          </DialogContentText>
+          <Grid container justify='center' style={{display:'flex'}}>
+            <Grid className={classes.root} item xs={12} md={4}>
               <TextField
+                className={classes.root}
                 label='Credit Card Number'
                 name='ccnumber'
                 variant='outlined'
                 color='primary'
                 required
+                margin='dense'
                 fullWidth
                 InputLabelProps={{ shrink: true }}
                 InputProps={{
@@ -114,17 +124,18 @@ const CardSectionF = props => {
                 }}
               />
             </Grid>
-          </Grid>
-          <Grid container justify='center'
-            spacing={3}>
-            <Grid item xs={4}>
+            <Grid className={classes.root} sitem xs={12} md={4}>
               <TextField
                 className={classes.root}
-                label='Expiry (MM / YY)'
+                label='Expiry'
                 name='expiry'
-                variant='outlined'
-                required
+                color='primary'
+                inputProps={{width:'40px'}}
                 fullWidth
+                variant='outlined'
+                margin='dense'
+                required
+                // fullWidth
                 InputLabelProps={{ shrink: true }}
                 InputProps={{
                   inputComponent: StripeInputF,
@@ -134,13 +145,17 @@ const CardSectionF = props => {
                 }}
               />
             </Grid>
-            <Grid item xs={4}>
+          </Grid>
+          <Grid container justify='center'style={{display:'flex'}}>
+            <Grid className={classes.root} item xs={12} md={4}>
               <TextField
+                className={classes.root}
                 label='CVC'
                 name='cvc'
+                // fullWidth
                 variant='outlined'
                 required
-                fullWidth
+                margin='dense'
                 InputLabelProps={{ shrink: true }}
                 InputProps={{
                   inputComponent: StripeInputF,
@@ -150,26 +165,53 @@ const CardSectionF = props => {
                 }}
               />
             </Grid>
+            <Grid className={classes.root} item xs={12} md={4}>
+              <TextField
+                className={classes.root}
+                label='email'
+                name='email'
+                variant='outlined'
+                InputLabelProps={{ shrink: true }}
+                margin='dense'
+                required
+                onChange={props.handleEmail}
+              />
+            </Grid>
           </Grid>
         </DialogContent>
         <DialogActions>
-          <Button
-            onClick={e => props.clickClose(e, 'cancel')}
-            color='primary'
-            variant='outlined'
+          <Grid
+            container
+            item
+            xs={8}
+            justify='flex-end'
+            style={{ marginRight: '30px' }}
           >
-            Cancel
-          </Button>
-          <Button
-            onClick={e => handleSubmit(e, props.open)}
-            // onClick={e => props.clickDonate(e, 'donate')}
-            variant='contained'
-            color='primary'
-          >
-            Donate
-          </Button>
+            <Grid item xs={3}>
+              <Button
+                onClick={e => props.clickClose(e, 'cancel')}
+                color='primary'
+                variant='outlined'
+              >
+                Cancel
+              </Button>
+            </Grid>
+
+            <Grid item xs={3}>
+              <Button
+                style={{ paddingRight: '24px' }}
+                onClick={e => handleSubmit(e, props.open)}
+                // onClick={e => props.clickDonate(e, 'donate')}
+                variant='contained'
+                color='primary'
+              >
+                Donate
+              </Button>
+            </Grid>
+          </Grid>
         </DialogActions>
       </Dialog>
+      {/* </Paper> */}
     </div>
   );
 };
