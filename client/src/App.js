@@ -10,42 +10,37 @@ import StripeCardSectionF from './components/StripeCardSectionF';
 import Spinner from './components/Spinner';
 import Success from './components/Success';
 import Intro from './views/Intro';
+import {
+  CardNumberElement,
+  CardExpiryElement,
+  CardCvcElement
+} from '@stripe/react-stripe-js';
+import { useStripe, useElements, cardNumber } from '@stripe/react-stripe-js';
 
-const stripePromise = loadStripe('pk_test_a43QH27BoRD284Oo81fVv69b00ol5Iku1m');
 
 const App = () => {
+  const stripe = useStripe();
+  const elements = useElements();
   const firstMount = useRef(true);
-
   const [amount, setAmount] = useState(10);
-
   const [currency, setCurrency] = useState('US Dollar');
-
   const [duration, setDuration] = useState('recurring');
-
   const [email, setEmail] = useState('');
-
   const [open, setOpen] = useState(false);
-
   const [openCard, setOpenCard] = useState(false);
-
   // const [donate, setDonate] = useState(false);
-
   const [data, setData] = useState('jk');
-
   const [step, setStep] = useState(0);
-
   const [loading, setLoading] = useState(false);
-
   const [success, setSuccess] = useState(false);
 
   const handleClickOpen = () => {
     setStep(2);
-
   };
 
   const handleEmailClick = event => {
     setEmail(event.target.value);
-  }
+  };
 
   const handleOpenCard = () => {
     console.log('in handleOpenCard');
@@ -115,7 +110,7 @@ const App = () => {
         if (response.data.id) {
           setData(response.data);
           setStep(2);
-          // console.log('logging data.id', response.data.id);
+          // console.log('logging data.id', response.data./id);
         } else if (response.data.type) {
           setData(response.data);
           setStep(3);
@@ -130,8 +125,46 @@ const App = () => {
     fetchData();
   }, [loading]);
 
+  const handleCardSubmit = async (event, openDialog) => {
+    // We don't want to let default form submission happen here,
+    // which would refresh the page.
+    event.preventDefault();
+    openDialog = 'false';
+
+    if (!stripe || !elements) {
+      // Stripe.js has not yet loaded.
+      // Make sure to disable form submission until Stripe.js has loaded.
+      return;
+    }
+
+    const result = await stripe.confirmCardPayment(
+      data.client_secret,
+      {
+        payment_method: {
+          card: elements.getElement(CardNumberElement)
+        }
+      }
+    );
+    console.log('result from cardPayment is: ', result);
+    if (result.error) {
+      // Show error to your customer (e.g., insufficient funds)
+      console.log(result.error.message);
+    } else {
+      // The payment has been processed!
+      if (result.paymentIntent.status === 'succeeded') {
+        setSuccess(true);
+        setStep(99);
+        console.log('SUCCESS');
+        // Show a success message to your customer
+        // There's a risk of the customer closing the window before callback
+        // execution. Set up a webhook or plugin to listen for the
+        // payment_intent.succeeded event that handles any business critical
+        // post-payment actions.
+      }
+    }
+  };
+
   return (
-    <Elements stripe={stripePromise}>
       <div className='App'>
         <Intention
           amount={handleAmount}
@@ -146,7 +179,7 @@ const App = () => {
         />
         {loading ? <Spinner /> : null}
         <StripeCardSectionF
-          paymentIntent={data}
+          // paymentIntent={data}
           open={step === 2 ? true : false}
           clickCardOpen={handleOpenCard}
           clickClose={handleCloseCardClick}
@@ -154,12 +187,12 @@ const App = () => {
           clickEmail={handleEmailClick}
           setSuccess={setSuccess}
           setStep={setStep}
+          handleSubmit={handleCardSubmit}
         />
-        {step === 3 ? <h1>'Mininum Donation is US $5'</h1>: null}
+        {step === 3 ? <h1>'Mininum Donation is US $5'</h1> : null}
         {success ? <Success /> : null}
         <Intro />
       </div>
-    </Elements>
   );
 };
 

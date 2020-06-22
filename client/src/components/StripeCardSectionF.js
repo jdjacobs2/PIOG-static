@@ -12,14 +12,13 @@ import {
   Paper
 } from '@material-ui/core';
 // import StripeElementWrapperF from './StripeElementWrapperF';
-import { useStripe, useElements, cardNumber } from '@stripe/react-stripe-js';
+import StripeInputF from './StripeInputF';
+// import handleSubmit from './StripeHandleOrder';
 import {
   CardNumberElement,
   CardExpiryElement,
   CardCvcElement
 } from '@stripe/react-stripe-js';
-import StripeInputF from './StripeInputF';
-// import handleSubmit from './StripeHandleOrder';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -42,49 +41,6 @@ const useStyles = makeStyles(theme => ({
 // Principal export component
 const CardSectionF = props => {
   const classes = useStyles();
-  const stripe = useStripe();
-  const elements = useElements();
-
-  console.log(`id of payementIntent:  ${props.paymentIntent.id}`);
-
-  const handleSubmit = async (event, openDialog) => {
-    // We don't want to let default form submission happen here,
-    // which would refresh the page.
-    event.preventDefault();
-    openDialog = 'false';
-
-    if (!stripe || !elements) {
-      // Stripe.js has not yet loaded.
-      // Make sure to disable form submission until Stripe.js has loaded.
-      return;
-    }
-
-    const result = await stripe.confirmCardPayment(
-      props.paymentIntent.client_secret,
-      {
-        payment_method: {
-          card: elements.getElement(CardNumberElement)
-        }
-      }
-    );
-    console.log('result from cardPayment is: ', result);
-    if (result.error) {
-      // Show error to your customer (e.g., insufficient funds)
-      console.log(result.error.message);
-    } else {
-      // The payment has been processed!
-      if (result.paymentIntent.status === 'succeeded') {
-        props.setSuccess(true);
-        props.setStep(99);
-        console.log('SUCCESS');
-        // Show a success message to your customer
-        // There's a risk of the customer closing the window before callback
-        // execution. Set up a webhook or plugin to listen for the
-        // payment_intent.succeeded event that handles any business critical
-        // post-payment actions.
-      }
-    }
-  };
 
   return (
     <div className={classes.root}>
@@ -202,7 +158,7 @@ const CardSectionF = props => {
             <Grid item xs={3}>
               <Button
                 style={{ paddingRight: '24px' }}
-                onClick={e => handleSubmit(e, props.open)}
+                onClick={e => props.handleSubmit(e, props.open)}
                 // onClick={e => props.clickDonate(e, 'donate')}
                 variant='contained'
                 color='primary'

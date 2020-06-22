@@ -1,9 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
+
+const stripePromise = loadStripe('pk_test_a43QH27BoRD284Oo81fVv69b00ol5Iku1m');
 
 ReactDOM.render(
-    <App />,
+  <Elements stripe={stripePromise}>
+    <App />
+  </Elements>,
   document.getElementById('root')
 );
 
