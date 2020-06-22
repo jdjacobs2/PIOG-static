@@ -9,6 +9,7 @@ import Intention from './components/Intention';
 import StripeCardSectionF from './components/StripeCardSectionF';
 import Spinner from './components/Spinner';
 import Success from './components/Success';
+import Intro from './views/Intro';
 
 const stripePromise = loadStripe('pk_test_a43QH27BoRD284Oo81fVv69b00ol5Iku1m');
 
@@ -132,10 +133,6 @@ const App = () => {
   return (
     <Elements stripe={stripePromise}>
       <div className='App'>
-        {/* <header>
-          <p>From React App</p>
-        </header> */}
-        {/* <Hello /> */}
         <Intention
           amount={handleAmount}
           amt={amount}
@@ -160,6 +157,7 @@ const App = () => {
         />
         {step === 3 ? <h1>'Mininum Donation is US $5'</h1>: null}
         {success ? <Success /> : null}
+        <Intro />
       </div>
     </Elements>
   );
