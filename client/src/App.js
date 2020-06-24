@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import axios from 'axios';
 // import Hello from './Hello';
 import { Elements } from '@stripe/react-stripe-js';
@@ -9,14 +10,13 @@ import Intention from './components/Intention';
 import StripeCardSectionF from './components/StripeCardSectionF';
 import Spinner from './components/Spinner';
 import Success from './components/Success';
-import Intro from './views/Intro';
+import Donate from './components/Donate';
 import {
   CardNumberElement,
   CardExpiryElement,
   CardCvcElement
 } from '@stripe/react-stripe-js';
 import { useStripe, useElements, cardNumber } from '@stripe/react-stripe-js';
-
 
 const App = () => {
   const stripe = useStripe();
@@ -137,14 +137,11 @@ const App = () => {
       return;
     }
 
-    const result = await stripe.confirmCardPayment(
-      data.client_secret,
-      {
-        payment_method: {
-          card: elements.getElement(CardNumberElement)
-        }
+    const result = await stripe.confirmCardPayment(data.client_secret, {
+      payment_method: {
+        card: elements.getElement(CardNumberElement)
       }
-    );
+    });
     console.log('result from cardPayment is: ', result);
     if (result.error) {
       // Show error to your customer (e.g., insufficient funds)
@@ -165,6 +162,7 @@ const App = () => {
   };
 
   return (
+    <BrowserRouter>
       <div className='App'>
         <Intention
           amount={handleAmount}
@@ -191,8 +189,9 @@ const App = () => {
         />
         {step === 3 ? <h1>'Mininum Donation is US $5'</h1> : null}
         {success ? <Success /> : null}
-        <Intro />
+        <Donate />
       </div>
+    </BrowserRouter>
   );
 };
 
