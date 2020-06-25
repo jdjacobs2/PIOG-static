@@ -83,3 +83,6 @@ public/donate/index-firebase.html
 public/donate/static/js/main.5805baff.chunk.js.map
 public/donate/static/js/runtime-main.98a2b520.js
 public/donate/static/js/runtime-main.98a2b520.js.map
+
+# old files
+/old-components-from-client/**
