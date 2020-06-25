@@ -32,14 +32,14 @@ function Intention(props) {
 
   return (
     <Fragment>
-      <Button variant='outlined' color='primary' onClick={props.clickOpen}>
+      {/* <Button variant='outlined' color='primary' onClick={props.clickOpen}>
         Open form dialog
-      </Button>
+      </Button> */}
       <Dialog open={props.open} onClose={props.close}>
         <DialogTitle id='form-dialog-title'>DONATE FORM</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            To donate please fill indicate the amount you wish to donate and whether it is a one time donation or a monthly recurring donation.  Per requirment of Stripe, our on-line payment provider, the minimum donation is US $5 or equivalent. 
+            To donate please fill indicate the amount you wish to donate and whether it is a one time donation or a monthly recurring donation.  Per requirment of Stripe, our on-line payment provider, Stripe, the minimum donation is US $5 or equivalent. This site is compliant with the Payment Card Industry and Data Security Standard.
           </DialogContentText>
           <br />
           <FormControl component='fieldset'>
@@ -110,7 +110,7 @@ function Intention(props) {
           <Button onClick={(e) => props.close(e, 'cancel')} color='primary'>
             Cancel
           </Button>
-          <Button onClick={(e) => props.close(e, 'donate')} color='primary'>
+          <Button onClick={(e) => props.close(e)} color='primary'>
             Donate
           </Button>
         </DialogActions>

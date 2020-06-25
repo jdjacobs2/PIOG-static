@@ -1,22 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import axios from 'axios';
-// import Hello from './Hello';
-import { Elements } from '@stripe/react-stripe-js';
-import { loadStripe } from '@stripe/stripe-js';
-// import CheckoutForm from './CheckoutForm';
 import Intention from './components/Intention';
-// import ConfirmOrderForm from './components/ConfirmOrderForm';
 import StripeCardSectionF from './components/StripeCardSectionF';
 import Spinner from './components/Spinner';
 import Success from './components/Success';
-import Donate from './components/Donate';
-import {
-  CardNumberElement,
-  CardExpiryElement,
-  CardCvcElement
-} from '@stripe/react-stripe-js';
-import { useStripe, useElements, cardNumber } from '@stripe/react-stripe-js';
+import { CardNumberElement } from '@stripe/react-stripe-js';
+import { useStripe, useElements } from '@stripe/react-stripe-js';
+import Intro from './components/Intro';
 
 const App = () => {
   const stripe = useStripe();
@@ -28,23 +18,24 @@ const App = () => {
   const [email, setEmail] = useState('');
   const [open, setOpen] = useState(false);
   const [openCard, setOpenCard] = useState(false);
-  // const [donate, setDonate] = useState(false);
-  const [data, setData] = useState('jk');
+  const [data, setData] = useState(null);
+  const [dataExists, setDataExists] = useState(false);
   const [step, setStep] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
+  const [getIntention, setGetIntention] = useState(false);
+  const [getPayment, setGetPayment] = useState(false);
 
-  const handleClickOpen = () => {
-    setStep(2);
-  };
+  // const handleClickOpen = () => {
+  //   setStep(0);
+  // };
 
   const handleEmailClick = event => {
     setEmail(event.target.value);
   };
 
   const handleOpenCard = () => {
-    console.log('in handleOpenCard');
-    setStep(2);
+    // console.log('in handleOpenCard');
+    setStep(3);
   };
 
   const handleDonateCardClick = () => {
@@ -56,11 +47,12 @@ const App = () => {
     setOpenCard(false);
   };
 
-  const handleClose = (e, func) => {
+  const handleIntentionClose = e => {
     // if (func === 'donate') {
     //   setDonate(true);
     // }
-    setStep(1);
+    // setStep(2);
+    setGetIntention(true);
     setLoading(true);
     // setOpen(false);
   };
@@ -78,27 +70,67 @@ const App = () => {
   };
 
   useEffect(() => {
-    console.log(`step is: ${step}`);
+    // console.log(`step is: ${step}`);
   });
 
   useEffect(() => {
-    if (loading) {
-    }
-  });
-
-  useEffect(() => {
-    if (data !== 'jk') {
-      console.log('in useEffect for setOpenCard', data);
-      setOpenCard(true);
-    }
+    // if (data !== 'jk') {
+    //   console.log('in useEffect for setOpenCard', data);
+    //   setOpenCard(true);
+    // }
   }, [data]);
 
   useEffect(() => {
+    if (!getPayment) {
+      return;
+    }
+    if (!stripe || !elements) {
+      // Stripe.js has not yet loaded.
+      // Make sure to disable form submission until Stripe.js has loaded.
+      return;
+    }
+    const getPaymentF = async () => {
+      const result = await stripe.confirmCardPayment(data.client_secret, {
+        payment_method: {
+          card: elements.getElement(CardNumberElement)
+        }
+      });
+      console.log('result from confirmCardPayment is: ', result);
+      if (result.error) {
+        // Show error to your customer (e.g., insufficient funds)
+        console.log(result.error.message);
+      } else {
+        // The payment has been processed!
+        if (result.paymentIntent.status === 'succeeded') {
+          // Show a success message to your customer
+          setStep(4);
+          setLoading(false);
+          // setSuccess(true);
+          setGetPayment(false);
+          console.log('SUCCESS');
+          // There's a risk of the customer closing the window before callback
+          // execution. Set up a webhook or plugin to listen for the
+          // payment_intent.succeeded event that handles any business critical
+          // post-payment actions.
+        }
+      }
+    };
+    getPaymentF();
+  }, [getPayment]);
+
+  useEffect(() => {
     // Only execute fetchData during and after first mount of Intention
-    if (firstMount.current && step !== 1) {
+    if (!getIntention) {
+      console.log(
+        `In first mount, step is ${step} amd firstMount.current is ${firstMount.current} and dataExist is ${dataExists}`
+      );
       firstMount.current = false;
       return;
     }
+    console.log(
+      `Before fetch intent step is ${step} amd firstMount.current is ${firstMount.current} and data is ${data} and dataExists is ${dataExists}`
+    );
+    setLoading(true);
     async function fetchData() {
       try {
         let response = await axios.post(
@@ -109,13 +141,18 @@ const App = () => {
         );
         if (response.data.id) {
           setData(response.data);
+          // setDataExists(true);
           setStep(2);
-          // console.log('logging data.id', response.data./id);
-        } else if (response.data.type) {
-          setData(response.data);
-          setStep(3);
-          // console.log('logging data.type', response.data.type);
+          console.log(
+            `after successful fetch intent logging data.id ${response.data.id} and step = ${step}`
+          );
         }
+        // else if (response.data.type) {
+        //   setData(response.data);
+        //   console.log('before set stpe 4');
+        //   setStep(4);
+        //   // console.log('logging data.type', response.data.type);
+        // }
       } catch (e) {
         console.log('error in getting paymentIntent:', e);
       }
@@ -123,75 +160,46 @@ const App = () => {
     }
 
     fetchData();
-  }, [loading]);
+  }, [getIntention]);
 
   const handleCardSubmit = async (event, openDialog) => {
     // We don't want to let default form submission happen here,
     // which would refresh the page.
     event.preventDefault();
-    openDialog = 'false';
-
-    if (!stripe || !elements) {
-      // Stripe.js has not yet loaded.
-      // Make sure to disable form submission until Stripe.js has loaded.
-      return;
-    }
-
-    const result = await stripe.confirmCardPayment(data.client_secret, {
-      payment_method: {
-        card: elements.getElement(CardNumberElement)
-      }
-    });
-    console.log('result from cardPayment is: ', result);
-    if (result.error) {
-      // Show error to your customer (e.g., insufficient funds)
-      console.log(result.error.message);
-    } else {
-      // The payment has been processed!
-      if (result.paymentIntent.status === 'succeeded') {
-        setSuccess(true);
-        setStep(99);
-        console.log('SUCCESS');
-        // Show a success message to your customer
-        // There's a risk of the customer closing the window before callback
-        // execution. Set up a webhook or plugin to listen for the
-        // payment_intent.succeeded event that handles any business critical
-        // post-payment actions.
-      }
-    }
+    setLoading(true);
+    setStep(99);
+    setGetPayment(true);
+    // openDialog = 'false';
   };
 
   return (
-    <BrowserRouter>
-      <div className='App'>
-        <Intention
-          amount={handleAmount}
-          amt={amount}
-          currency={handleCurrency}
-          cur={currency}
-          duration={handleDuration}
-          dur={duration}
-          open={!step}
-          // clickOpen={handleClickOpen}
-          close={handleClose}
-        />
-        {loading ? <Spinner /> : null}
-        <StripeCardSectionF
-          // paymentIntent={data}
-          open={step === 2 ? true : false}
-          clickCardOpen={handleOpenCard}
-          clickClose={handleCloseCardClick}
-          clickDonate={handleDonateCardClick}
-          clickEmail={handleEmailClick}
-          setSuccess={setSuccess}
-          setStep={setStep}
-          handleSubmit={handleCardSubmit}
-        />
-        {step === 3 ? <h1>'Mininum Donation is US $5'</h1> : null}
-        {success ? <Success /> : null}
-        <Donate />
-      </div>
-    </BrowserRouter>
+    <div className='App'>
+      <Intro setStep={setStep} step={step} />
+      <Intention
+        amount={handleAmount}
+        amt={amount}
+        currency={handleCurrency}
+        cur={currency}
+        duration={handleDuration}
+        dur={duration}
+        open={step === 1}
+        // clickOpen={handleClickOpen}
+        close={handleIntentionClose}
+      />
+      <StripeCardSectionF
+        // paymentIntent={data}
+        open={step === 2 ? true : false}
+        clickCardOpen={handleOpenCard}
+        clickClose={handleCloseCardClick}
+        clickDonate={handleDonateCardClick}
+        clickEmail={handleEmailClick}
+        setStepFunc={setStep}
+        handleSubmit={handleCardSubmit}
+      />
+      {step === 3 ? <h1>'Mininum Donation is US $5'</h1> : null}
+      <Success open={(step === 4) ? true : false} /> : null}
+      {loading ? <Spinner /> : null}
+    </div>
   );
 };
 

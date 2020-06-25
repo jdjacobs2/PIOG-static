@@ -9,6 +9,7 @@ const stripePromise = loadStripe('pk_test_a43QH27BoRD284Oo81fVv69b00ol5Iku1m');
 ReactDOM.render(
   <Elements stripe={stripePromise}>
     <App />
+    {/* <Success /> */}
   </Elements>,
   document.getElementById('root')
 );

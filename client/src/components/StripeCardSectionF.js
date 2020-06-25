@@ -9,7 +9,6 @@ import {
   DialogContentText,
   DialogTitle,
   TextField,
-  Paper
 } from '@material-ui/core';
 // import StripeElementWrapperF from './StripeElementWrapperF';
 import StripeInputF from './StripeInputF';
@@ -22,19 +21,19 @@ import {
 
 const useStyles = makeStyles(theme => ({
   root: {
-    '& .MuiTextField-root': {
-      margin: theme.spacing(1),
-      // width: '25ch',
-      marginBottom: '20px'
-    },
-    '& > .MuiDialog-container > .MuiPaper-root': {
-      minHeight: '380px'
-    },
-    // '& .MuiGrid': {
-    //   margin: '40px'
+    // '& .MuiTextField-root': {
+    //   margin: theme.spacing(1),
+    //   // width: '25ch',
+    //   marginBottom: '20px'
     // },
-    display: 'flex',
-    flexGrow: 1
+    // '& > .MuiDialog-container > .MuiPaper-root': {
+    //   minHeight: '380px'
+    // },
+    // // '& .MuiGrid': {
+    // //   margin: '40px'
+    // // },
+    // display: 'flex',
+    // flexGrow: 1
   },
 }));
 
@@ -43,10 +42,10 @@ const CardSectionF = props => {
   const classes = useStyles();
 
   return (
-    <div className={classes.root}>
-      <Button variant='outlined' color='primary' onClick={props.clickCardOpen}>
-        Open Card Dialog
-      </Button>
+    <React.Fragment >
+    {/* //   <Button variant='outlined' color='primary' onClick={props.clickCardOpen}>
+    //     Open Card Dialog
+    //   </Button> */}
       {/* <Paper variant='elevation' elevation={4} style={{ minHeight: 750 }}> */}
       <Dialog
         open={props.open}
@@ -60,7 +59,7 @@ const CardSectionF = props => {
           <DialogContentText>
             To donate please complete this form with your credit card infomation
             and email. Only Stripe, PIOG's on-line payment provider, will see or
-            retain any personal information.
+            retain any personal information.  This site is compliant with the Payment Card Industry and Data Security Standard.
           </DialogContentText>
           <Grid container justify='center' style={{display:'flex'}}>
             <Grid className={classes.root} item xs={12} md={5}>
@@ -82,7 +81,7 @@ const CardSectionF = props => {
                 }}
               />
             </Grid>
-            <Grid className={classes.root} sitem xs={12} md={5}>
+            <Grid className={classes.root} item xs={12} md={5}>
               <TextField
                 className={classes.root}
                 label='Expiry'
@@ -170,7 +169,7 @@ const CardSectionF = props => {
         </DialogActions>
       </Dialog>
       {/* </Paper> */}
-    </div>
+    </React.Fragment>
   );
 };
 

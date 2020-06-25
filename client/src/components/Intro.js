@@ -26,48 +26,70 @@ const theme = createMuiTheme({
 const useStyles = makeStyles(theme => ({
   root: {
     // transition: 'tranform 5s',
-    width: '600px',
-    height: '120px',
-    position: 'relative',
-    dipslay: 'absolute',
-    fontSize: '5rem',
+    width: '100%',
+    height: '100%',
+    // position: 'relative',
+    fontSize: '2rem',
     color: 'yellow'
     // '&:hover': {
     // transform: 'rotate(45deg)'
 
     // }
-  },
-
-  ani: {
-    display: 'block',
-    position: 'fixed',
-    animation: '$slideInTopLeft 5s forwards .5s 1'
-  },
-
-  '@keyframes slideInTopLeft': {
-    '0%': {
-      top: '10vh',
-      left: '0vw'
-    },
-    '100%': {
-      top: '75vh',
-      left: '50vw'
-    }
   }
+
+  // ani: {
+  //   display: 'block',
+  //   position: 'fixed',
+  //   animation: '$slideInTopLeft 5s forwards .5s 1'
+  // },
+
+  // '@keyframes slideInTopLeft': {
+  //   '0%': {
+  //     top: '10vh',
+  //     left: '0vw'
+  //   },
+  //   '100%': {
+  //     top: '75vh',
+  //     left: '60vw'
+  //   }
 }));
 
-function Intro() {
+const Intro = props => {
   const classes = useStyles();
+  const { setStep, step } = { ...props };
+  // console.log(props);
+  // console.log(setStep, step);
 
   const [loaded, setLoaded] = useState(false);
-  useEffect(() => setLoaded(true));
-  console.log(classes.root);
-  const totalClasses = clsx(classes.root, loaded && classes.ani);
-  console.log(`totalClasses: ${totalClasses};`);
+  useEffect(() => setLoaded(true), []);
+  // console.log(classes.root);
+  // const totalClasses = clsx(classes.root, loaded && classes.ani);
+  // console.log(`totalClasses: ${totalClasses};`);
+
+  const handleClick = () => {
+    // console.log(`In handleClick, step is:  ${step}`);
+    setStep(step + 1);
+    // console.log(`In handleClick, step is:  ${step}`);
+  };
+
   return (
     <div>
       <ThemeProvider theme={theme}>
-        <Box mx={28} mt={17} mb={10}>
+        <Box mx={28} mt={17} mb={7}>
+          <Box mb={4}>
+            <Grid>
+              <Button
+                fullWidth
+                style={{height:'65px', fontSize:'2rem'}}
+                onClick={() => handleClick()}
+                variant='contained'
+                color='primary'
+              >
+                CLICK TO DONATE TO PASS IT ON GUATEMALA
+              </Button>
+            </Grid>
+          </Box>
+
           <Grid container>
             <Grid item sm={6} style={{ display: 'flex', alignItems: 'center' }}>
               <Typography variant='body1'>
@@ -123,7 +145,7 @@ function Intro() {
               </Paper>
             </Grid>
           </Grid>
-          <Box mt={4}>
+          <Box mt={4} mb={4}>
             <Typography variant='body1' mt={2} gutterBottom id='bottom'>
               Apart from the solar lanterns and panel systems everything else
               that you see on this web site, from the washing machine to the
@@ -134,10 +156,11 @@ function Intro() {
               to see the smiles and feel the hugs of gratitude for yourself. We
               welcome visitors with open arms.
             </Typography>
+            
           </Box>
           <Grid
             container
-            style={{ display: 'flex', justifyContent: 'space-between' }}
+            justify='flex-end'
           >
             <Grid item sm={4}>
               <Typography variant='subtitle1'>
@@ -148,20 +171,24 @@ function Intro() {
                 1616 MCGEE ROAD LAVOINA, GA 30553-0000
               </Typography>
             </Grid>
+            <Grid item sm={8}>
+              <Button
+                // size='large'
+                // style={{height:'100%'}}
+                // fullWidth
+                onClick={() => handleClick()}
+                className={classes.root}
+                variant='contained'
+                color='primary'
+              >
+                DONATE
+              </Button>
+            </Grid>
           </Grid>
-          <Button
-            size='large'
-            // className={classes.sizeLarge && classes.textSizeLarge}
-            className={totalClasses}
-            variant='contained'
-            color='primary'
-          >
-            DONATE
-          </Button>
         </Box>
       </ThemeProvider>
     </div>
   );
-}
+};
 
 export default Intro;

@@ -1,0 +1,30 @@
+Intention opens when step == 1
+
+StripeCardSectionF opens when step == 2
+
+Minimum Donation error open when step == 3
+
+Success opens when Success == true
+
+StripeCardSectionF uses setStep
+
+step is initialize == 0
+
+[handleClickOpen sets step to 0] not used
+
+[handleOpenCard sets step to 3 -- attrib to StripeCardSectionF--used to open StripeCardSectionF but now not used]
+
+handleClose sets step to 2 and setLoading to true--used at attrib to Intention
+
+handleSubmit (handleCardSubmiy())is attrib of StripeCardSectionF and clicked on donate (probably do not need props.open parameter)
+
+fetchData when firstMount.current is true and step > 0
+
+fetchData get id sets step to 2
+
+handleCardSubmit upon Success sets step to 99 
+
+Intro has attrib setStep and step
+
+Success  opens when step is 4
+
