@@ -33,7 +33,7 @@ function Success(props) {
               Success
             </Typography>
             <Typography align='center' variant='body1'>
-              Congratulation on your donation to <br />
+              Thank you and <br />congratulations on your donation to <br />
               Pass It On Guatemala
             </Typography>
           </Paper>

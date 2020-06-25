@@ -21,20 +21,22 @@ import {
 
 const useStyles = makeStyles(theme => ({
   root: {
-    // '& .MuiTextField-root': {
-    //   margin: theme.spacing(1),
-    //   // width: '25ch',
-    //   marginBottom: '20px'
-    // },
-    // '& > .MuiDialog-container > .MuiPaper-root': {
-    //   minHeight: '380px'
-    // },
-    // // '& .MuiGrid': {
-    // //   margin: '40px'
-    // // },
-    // display: 'flex',
-    // flexGrow: 1
-  },
+
+    '& .MuiTextField-root': {
+      margin: theme.spacing(4),
+      width: '25ch',
+      marginBottom: '20px'
+      // },
+      // '& > .MuiDialog-container > .MuiPaper-root': {
+      //   minHeight: '380px'
+      // },
+      // // '& .MuiGrid': {
+      // //   margin: '40px'
+      // // },
+      // display: 'flex',
+      // flexGrow: 1
+    },
+  }
 }));
 
 // Principal export component
@@ -71,7 +73,7 @@ const CardSectionF = props => {
                 color='primary'
                 required
                 margin='dense'
-                fullWidth
+                // fullWidth
                 InputLabelProps={{ shrink: true }}
                 InputProps={{
                   inputComponent: StripeInputF,
@@ -88,11 +90,10 @@ const CardSectionF = props => {
                 name='expiry'
                 color='primary'
                 inputProps={{width:'40px'}}
-                fullWidth
+                // fullWidth
                 variant='outlined'
                 margin='dense'
                 required
-                // fullWidth
                 InputLabelProps={{ shrink: true }}
                 InputProps={{
                   inputComponent: StripeInputF,
@@ -111,6 +112,7 @@ const CardSectionF = props => {
                 name='cvc'
                 // fullWidth
                 variant='outlined'
+                inputProps={{ width: '40px' }}
                 required
                 margin='dense'
                 InputLabelProps={{ shrink: true }}
