@@ -16,10 +16,9 @@ const App = () => {
   const [currency, setCurrency] = useState('US Dollar');
   const [duration, setDuration] = useState('recurring');
   const [email, setEmail] = useState('');
-  const [open, setOpen] = useState(false);
-  const [openCard, setOpenCard] = useState(false);
+  // const [openCard, setOpenCard] = useState(false);
   const [data, setData] = useState(null);
-  const [dataExists, setDataExists] = useState(false);
+  // const [dataExists, setDataExists] = useState(false);
   const [step, setStep] = useState(0);
   const [loading, setLoading] = useState(false);
   const [getIntention, setGetIntention] = useState(false);
@@ -28,6 +27,15 @@ const App = () => {
   // const handleClickOpen = () => {
   //   setStep(0);
   // };
+
+  const reset = () => {
+    firstMount.current = true;
+    setData(null);
+    setStep(0);
+    setLoading(false);
+    setGetIntention(false);
+    setGetPayment(false);
+  };
 
   const handleEmailClick = event => {
     setEmail(event.target.value);
@@ -38,16 +46,17 @@ const App = () => {
     setStep(3);
   };
 
-  const handleDonateCardClick = () => {
-    setOpenCard(false);
-    //  add additional donate card here
-  };
+  // const handleDonateCardClick = () => {
+  //   setOpenCard(false);
+  //   //  add additional donate card here
+  // };
 
   const handleCloseCardClick = () => {
-    setOpenCard(false);
+    reset();
+    // setOpenCard(false);
   };
 
-  const handleIntentionClose = e => {
+  const handleIntentionSubmit = e => {
     // if (func === 'donate') {
     //   setDonate(true);
     // }
@@ -55,6 +64,10 @@ const App = () => {
     setGetIntention(true);
     setLoading(true);
     // setOpen(false);
+  };
+
+  const handleIntentionClose = e => {
+    reset();
   };
 
   const handleDuration = event => {
@@ -122,13 +135,13 @@ const App = () => {
     // Only execute fetchData during and after first mount of Intention
     if (!getIntention) {
       console.log(
-        `In first mount, step is ${step} amd firstMount.current is ${firstMount.current} and dataExist is ${dataExists}`
+        `In first mount, step is ${step} amd firstMount.current is ${firstMount.current} `
       );
       firstMount.current = false;
       return;
     }
     console.log(
-      `Before fetch intent step is ${step} amd firstMount.current is ${firstMount.current} and data is ${data} and dataExists is ${dataExists}`
+      `Before fetch intent step is ${step} amd firstMount.current is ${firstMount.current} and data is ${data} `
     );
     setLoading(true);
     async function fetchData() {
@@ -136,7 +149,7 @@ const App = () => {
         let response = await axios.post(
           'https://us-central1-piog-dd672.cloudfunctions.net/app/contribution',
           {
-            data: { amount, currency, duration }
+            data: { amount, currency, duration, email }
           }
         );
         if (response.data.id) {
@@ -183,21 +196,20 @@ const App = () => {
         duration={handleDuration}
         dur={duration}
         open={step === 1}
-        // clickOpen={handleClickOpen}
         close={handleIntentionClose}
+        submit={handleIntentionSubmit}
       />
       <StripeCardSectionF
         // paymentIntent={data}
         open={step === 2 ? true : false}
-        clickCardOpen={handleOpenCard}
+        // clickCardOpen={handleOpenCard}
         clickClose={handleCloseCardClick}
-        clickDonate={handleDonateCardClick}
         clickEmail={handleEmailClick}
         setStepFunc={setStep}
         handleSubmit={handleCardSubmit}
       />
-      {step === 3 ? <h1>'Mininum Donation is US $5'</h1> : null}
-      <Success open={(step === 4) ? true : false} /> : null}
+      {step === 3 ? console.log('step 3') : null}
+      <Success open={step === 4 ? true : false} />
       {loading ? <Spinner /> : null}
     </div>
   );

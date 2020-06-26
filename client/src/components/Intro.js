@@ -26,15 +26,23 @@ const theme = createMuiTheme({
 const useStyles = makeStyles(theme => ({
   root: {
     // transition: 'tranform 5s',
-    width: '100%',
-    height: '100%',
+    // width: '100%',
+    // height: '100%',
     // position: 'relative',
     fontSize: '2rem',
     color: 'yellow'
     // '&:hover': {
     // transform: 'rotate(45deg)'
+  },
 
-    // }
+  blink: {
+    animation: '$blinker 5s linear  infinite'
+  },
+
+  '@Keyframes blinker': {
+    '50%': {
+      opacity: 0
+    }
   }
 
   // ani: {
@@ -78,9 +86,11 @@ const Intro = props => {
         <Box mx={28} mt={17} mb={7}>
           <Box mb={4}>
             <Grid>
+              {/* TODO: Blink the button */}
               <Button
-                fullWidth
-                style={{height:'65px', fontSize:'2rem'}}
+                // fullWidth
+                // className={classes.blink}
+                style={{ height: '65px', fontSize: '2rem' }}
                 onClick={() => handleClick()}
                 variant='contained'
                 color='primary'
@@ -104,7 +114,7 @@ const Intro = props => {
               style={{ display: 'flex', justifyContent: 'center' }}
             >
               <Paper elevation={3}>
-                <img src={molotov} height='200px' alt='molotov cocktail' />
+                <img src={molotov} style={{ height: '200px' }} alt='molotov cocktail' />
               </Paper>
             </Grid>
           </Grid>
@@ -115,7 +125,7 @@ const Intro = props => {
               style={{ display: 'flex', justifyContent: 'center' }}
             >
               <Paper elevation={5}>
-                <img src={houseFire} width='200px' height='250px' alt='' />
+                <img src={houseFire} style={{ height: '200px' }} alt='' />
               </Paper>
             </Grid>
             <Grid item sm={6} style={{ display: 'flex', alignItems: 'center' }}>
@@ -138,10 +148,9 @@ const Intro = props => {
             <Grid
               item
               sm={6}
-              style={{ display: 'flex', justifyContent: 'center' }}
-            >
+              style={{ display: 'flex', justifyContent: 'center' }} >
               <Paper elevation={3}>
-                <img src={lampWChild} height='200px' alt='molotov cocktail' />
+                <img src={lampWChild} style={{height:'200px'}} alt='child with lamp' />
               </Paper>
             </Grid>
           </Grid>
@@ -156,12 +165,8 @@ const Intro = props => {
               to see the smiles and feel the hugs of gratitude for yourself. We
               welcome visitors with open arms.
             </Typography>
-            
           </Box>
-          <Grid
-            container
-            justify='flex-end'
-          >
+          <Grid container justify='space-around'>
             <Grid item sm={4}>
               <Typography variant='subtitle1'>
                 Pass It On Guatemala
@@ -171,9 +176,9 @@ const Intro = props => {
                 1616 MCGEE ROAD LAVOINA, GA 30553-0000
               </Typography>
             </Grid>
-            <Grid item sm={8}>
+            <Grid item sm={4}>
               <Button
-                // size='large'
+                size='large'
                 // style={{height:'100%'}}
                 // fullWidth
                 onClick={() => handleClick()}

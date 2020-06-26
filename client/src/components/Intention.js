@@ -110,7 +110,7 @@ function Intention(props) {
           <Button onClick={(e) => props.close(e, 'cancel')} color='primary'>
             Cancel
           </Button>
-          <Button onClick={(e) => props.close(e)} color='primary'>
+          <Button onClick={(e) => props.submit(e)} color='primary'>
             Donate
           </Button>
         </DialogActions>

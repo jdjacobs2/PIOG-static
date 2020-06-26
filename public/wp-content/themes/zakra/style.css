@@ -380,7 +380,8 @@ hr {
 }
 
 img {
-	height: auto;
+  height: auto;
+  /* height:175px; */
 	/* Make sure images are scaled correctly. */
 	max-width: 100%;
 	/* Adhere to container width. */
